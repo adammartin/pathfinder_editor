@@ -1,0 +1,6 @@
+[MASTER]
+init-hook='import sys; sys.path.append("./src/pathfinder_editor")'
+ignore=test
+
+[MESSAGES CONTROL]
+disable=missing-docstring

@@ -1,0 +1,2 @@
+pyforms-gui==4.0.5
+python-string-utils==0.6.0
