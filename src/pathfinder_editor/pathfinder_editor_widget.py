@@ -2,31 +2,10 @@ from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText
 from pyforms.controls import ControlFile
 from pyforms.controls import ControlButton
+from file_utils import extract_file, full_path, load_json, save_json, persist_as_zip
 from pathlib import Path
-from zipfile import ZipFile, ZIP_DEFLATED
 from shutil import rmtree
-import json, io, time, os
-
-def extract_file(path, temp_dir_path):
-    if path.is_file():
-        with ZipFile(str(path.resolve()), 'r') as save_zip:
-            save_zip.extractall(path=str(temp_dir_path.resolve()))
-
-def zip_dir(path, zipfile):
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            zipfile.write(os.path.join(root, file))
-
-def load_json(dir_path, file_name):
-    contents = io.open(full_path(dir_path, file_name), 'r', encoding='utf-8-sig').read()
-    return json.loads(contents)
-
-def save_json(dir_path, file_name, contents):
-    with io.open(full_path(dir_path, file_name), 'w', encoding='utf-8-sig') as json_file:
-        json.dump(contents, json_file)
-
-def full_path(dir_path, file_name):
-    return str((dir_path / file_name).resolve())
+import time
 
 class PathfinderEditorWidget(BaseWidget):
     def __init__(self, *args, **kwargs):
@@ -57,6 +36,7 @@ class PathfinderEditorWidget(BaseWidget):
 
     def __update_save(self):
         try:
+            money = int(self._money_field.value)
             player_json = load_json(self._temp_path, 'player.json')
             player_json['Money'] = int(self._money_field.value)
             save_json(self._temp_path, 'player.json', player_json)
@@ -68,10 +48,7 @@ class PathfinderEditorWidget(BaseWidget):
             save_root = Path(self._savefile.value).parent
             save_file = str(int(round(time.time() * 1000))) + ".zks"
 
-            zip_path = full_path(save_root, save_file)
-            zip_file = ZipFile(zip_path, 'w', ZIP_DEFLATED)
-            zip_dir(self._temp_path, zip_file)
-            zip_file.close()
+            persist_as_zip(save_root, save_file, self._temp_path)
             rmtree(self._temp_path)
         except Exception as e:
             print(e)
