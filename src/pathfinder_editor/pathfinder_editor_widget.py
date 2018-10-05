@@ -5,7 +5,8 @@ from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText
 from pyforms.controls import ControlFile
 from pyforms.controls import ControlButton
-from file_utils import extract_file, load_json, save_json, persist_as_zip
+from file_utils import extract_file, persist_as_zip
+from player_info import PlayerInfo
 
 
 class PathfinderEditorWidget(BaseWidget):
@@ -29,17 +30,12 @@ class PathfinderEditorWidget(BaseWidget):
 
     def __load_save_file(self):
         extract_file(Path(self._savefile.value), self._temp_path)
-        player_json = load_json(self._temp_path, 'player.json')
-        self._money_field.value = str(player_json['Money'])
+        self._money_field.value = PlayerInfo(self._temp_path).money()
 
     def __update_save(self):
-        player_json = load_json(self._temp_path, 'player.json')
-        player_json['Money'] = int(self._money_field.value)
-        save_json(self._temp_path, 'player.json', player_json)
-
-        header_json = load_json(self._temp_path, 'header.json')
-        header_json["Name"] = "EDITED - " + header_json["Name"]
-        save_json(self._temp_path, 'header.json', header_json)
+        player_info = PlayerInfo(self._temp_path)
+        player_info.update_money(self._money_field.value)
+        player_info.update_header_name()
 
         save_root = Path(self._savefile.value).parent
         save_file = str(int(round(time.time() * 1000))) + ".zks"
