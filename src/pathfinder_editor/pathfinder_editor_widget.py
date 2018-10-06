@@ -5,6 +5,7 @@ from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText
 from pyforms.controls import ControlFile
 from pyforms.controls import ControlButton
+from pyforms.controls import ControlLabel
 from file_utils import extract_file, persist_as_zip
 from player_info import PlayerInfo
 
@@ -14,7 +15,8 @@ class PathfinderEditorWidget(BaseWidget):
         super().__init__('Python editor for Pathfinder: Kingmaker')
         self._savefile = ControlFile('Save File')
         self._loadbutton = ControlButton('Load')
-        self._name_field = ControlText('Name')
+        self._name_field = ControlLabel('Name:')
+        self._name_value = ControlLabel('')
         self._money_field = ControlText('Money')
         self._strength_field = ControlText('Strength')
         self._dexterity_field = ControlText('Dexterity')
@@ -28,7 +30,8 @@ class PathfinderEditorWidget(BaseWidget):
         self._formset = [
             '_savefile',
             '_loadbutton',
-            ('_name_field', '_money_field'),
+            ('_name_field', '_name_value'),
+            ('_money_field'),
             ('_strength_field', '_dexterity_field', '_constitution_field'),
             ('_intelligence_field', '_wisdom_field', '_charisma_field'),
             '_savebutton',
@@ -40,7 +43,7 @@ class PathfinderEditorWidget(BaseWidget):
     def __load_save_file(self):
         extract_file(Path(self._savefile.value), self._temp_path)
         player_info = PlayerInfo(self._temp_path)
-        self._name_field.value = player_info.name()
+        self._name_value.value = player_info.name()
         self._money_field.value = player_info.money()
         self._strength_field.value = player_info.strength()
         self._dexterity_field.value = player_info.dexterity()
