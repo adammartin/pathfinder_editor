@@ -5,11 +5,15 @@ from file_utils import load_json, save_json
 class PlayerInfo:
     def __init__(self, path):
         self._temp_path = path
+        self._party_json_name = "party.json"
         self._player_json_name = 'player.json'
         self._header_json_name = 'header.json'
 
     def money(self):
         return str(self._json(self._player_json_name)["Money"])
+
+    def name(self):
+        return self._main_character()["CustomName"]
 
     def update_money(self, money):
         player_json = self._json(self._player_json_name)
@@ -23,3 +27,6 @@ class PlayerInfo:
 
     def _json(self, json_file_name):
         return load_json(self._temp_path, json_file_name)
+
+    def _main_character(self):
+        return self._json(self._party_json_name)["m_EntityData"][0]["Descriptor"]

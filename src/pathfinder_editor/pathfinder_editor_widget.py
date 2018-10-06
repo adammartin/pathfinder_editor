@@ -14,6 +14,7 @@ class PathfinderEditorWidget(BaseWidget):
         super().__init__('Python editor for Pathfinder: Kingmaker')
         self._savefile = ControlFile('Save File')
         self._loadbutton = ControlButton('Load')
+        self._name_field = ControlText('Name')
         self._money_field = ControlText('Money')
         self._savebutton = ControlButton('Save')
         self._temp_path = Path('./tempdir/')
@@ -21,7 +22,7 @@ class PathfinderEditorWidget(BaseWidget):
         self._formset = [
             '_savefile',
             '_loadbutton',
-            '_money_field',
+            ('_name_field', '_money_field'),
             '_savebutton',
         ]
 
@@ -30,6 +31,7 @@ class PathfinderEditorWidget(BaseWidget):
 
     def __load_save_file(self):
         extract_file(Path(self._savefile.value), self._temp_path)
+        self._name_field.value = PlayerInfo(self._temp_path).name()
         self._money_field.value = PlayerInfo(self._temp_path).money()
 
     def __update_save(self):
