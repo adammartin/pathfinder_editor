@@ -11,6 +11,7 @@ from player_info import PlayerInfo
 
 
 class PathfinderEditorWidget(BaseWidget):
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, *args, **kwargs):
         super().__init__('Python editor for Pathfinder: Kingmaker')
         self._savefile = ControlFile('Save File')

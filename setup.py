@@ -20,7 +20,7 @@ setup(
     package_dir={'': 'src'},
     entry_points='''
             [console_scripts]
-            pathfinder_editor=pathfinder_editor.cli:pathfinder_editor
+            pathfinder_editor=pathfinder_editor.pathfinder_editor:pathfinder_editor
     ''',
 
     install_requires=[

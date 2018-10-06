@@ -83,11 +83,14 @@ class PlayerInfo:
             _update_attribute_ref(attribute["$ref"], stats, value)
         save_json(self._temp_path, self._party_json_name, data)
 
+
 def _main_character(data):
     return data["m_EntityData"][0]["Descriptor"]
 
+
 def _main_character_stats(data):
     return _main_character(data)["Stats"]
+
 
 def _load_attribute_ref(ref, stats):
     for stat, struct in stats.items():
@@ -95,6 +98,7 @@ def _load_attribute_ref(ref, stats):
             if struct["BaseStat"]["$id"] == ref:
                 return str(stats[stat]["BaseStat"]["PermanentValue"])
     return "Unknown"
+
 
 def _update_attribute_ref(ref, stats, value):
     for stat, struct in stats.items():
