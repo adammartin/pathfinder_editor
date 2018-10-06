@@ -13,7 +13,7 @@ class PlayerInfo:
 
     def name(self):
         data = self._json(self._party_json_name)
-        return self._main_character(data)["CustomName"]
+        return _main_character(data)["CustomName"]
 
     def strength(self):
         return self._load_attribute_value("Strength")
@@ -64,42 +64,41 @@ class PlayerInfo:
     def _json(self, json_file_name):
         return load_json(self._temp_path, json_file_name)
 
-    def _main_character(self, data):
-        return data["m_EntityData"][0]["Descriptor"]
-
-    def _main_character_stats(self, data):
-        return self._main_character(data)["Stats"]
-
     def _load_attribute_value(self, attribute_name):
         data = self._json(self._party_json_name)
-        stats = self._main_character_stats(data)
+        stats = _main_character_stats(data)
         attribute = stats[attribute_name]
         if "PermanentValue" in attribute:
             return str(attribute["PermanentValue"])
-        return self._load_attribute_ref(attribute["$ref"], stats)
+        return _load_attribute_ref(attribute["$ref"], stats)
 
     def _update_attribute_value(self, attribute_name, value):
         data = self._json(self._party_json_name)
-        stats = self._main_character_stats(data)
+        stats = _main_character_stats(data)
         attribute = stats[attribute_name]
         if "PermanentValue" in attribute:
             attribute["PermanentValue"] = int(value)
             attribute["m_BaseValue"] = int(value)
         else:
-            self._update_attribute_ref(attribute["$ref"], stats, value)
+            _update_attribute_ref(attribute["$ref"], stats, value)
         save_json(self._temp_path, self._party_json_name, data)
 
+def _main_character(data):
+    return data["m_EntityData"][0]["Descriptor"]
 
-    def _load_attribute_ref(self, ref, stats):
-        for stat, struct in stats.items():
-            if "BaseStat" in struct:
-                if struct["BaseStat"]["$id"] == ref:
-                    return str(stats[stat]["BaseStat"]["PermanentValue"])
-        return "Unknown"
+def _main_character_stats(data):
+    return _main_character(data)["Stats"]
 
-    def _update_attribute_ref(self, ref, stats, value):
-        for stat, struct in stats.items():
-            if "BaseStat" in struct:
-                if struct["BaseStat"]["$id"] == ref:
-                    stats[stat]["BaseStat"]["PermanentValue"] = int(value)
-                    stats[stat]["BaseStat"]["m_BaseValue"] = int(value)
+def _load_attribute_ref(ref, stats):
+    for stat, struct in stats.items():
+        if "BaseStat" in struct:
+            if struct["BaseStat"]["$id"] == ref:
+                return str(stats[stat]["BaseStat"]["PermanentValue"])
+    return "Unknown"
+
+def _update_attribute_ref(ref, stats, value):
+    for stat, struct in stats.items():
+        if "BaseStat" in struct:
+            if struct["BaseStat"]["$id"] == ref:
+                stats[stat]["BaseStat"]["PermanentValue"] = int(value)
+                stats[stat]["BaseStat"]["m_BaseValue"] = int(value)
