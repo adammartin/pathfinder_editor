@@ -17,6 +17,11 @@ class PathfinderEditorWidget(BaseWidget):
         self._name_field = ControlText('Name')
         self._money_field = ControlText('Money')
         self._strength_field = ControlText('Strength')
+        self._dexterity_field = ControlText('Dexterity')
+        self._constitution_field = ControlText('Constitution')
+        self._intelligence_field = ControlText('Intelligence')
+        self._wisdom_field = ControlText('Wisdom')
+        self._charisma_field = ControlText('Charisma')
         self._savebutton = ControlButton('Save')
         self._temp_path = Path('./tempdir/')
 
@@ -24,7 +29,8 @@ class PathfinderEditorWidget(BaseWidget):
             '_savefile',
             '_loadbutton',
             ('_name_field', '_money_field'),
-            '_strength_field',
+            ('_strength_field', '_dexterity_field', '_constitution_field'),
+            ('_intelligence_field', '_wisdom_field', '_charisma_field'),
             '_savebutton',
         ]
 
@@ -33,14 +39,26 @@ class PathfinderEditorWidget(BaseWidget):
 
     def __load_save_file(self):
         extract_file(Path(self._savefile.value), self._temp_path)
-        self._name_field.value = PlayerInfo(self._temp_path).name()
-        self._money_field.value = PlayerInfo(self._temp_path).money()
-        self._strength_field.value = PlayerInfo(self._temp_path).strength()
+        player_info = PlayerInfo(self._temp_path)
+        self._name_field.value = player_info.name()
+        self._money_field.value = player_info.money()
+        self._strength_field.value = player_info.strength()
+        self._dexterity_field.value = player_info.dexterity()
+        self._constitution_field.value = player_info.constitution()
+        self._intelligence_field.value = player_info.intelligence()
+        self._wisdom_field.value = player_info.wisdom()
+        self._charisma_field.value = player_info.charisma()
 
     def __update_save(self):
         player_info = PlayerInfo(self._temp_path)
         player_info.update_money(self._money_field.value)
         player_info.update_header_name()
+        player_info.update_strength(self._strength_field.value)
+        player_info.update_dexterity(self._dexterity_field.value)
+        player_info.update_constitution(self._constitution_field.value)
+        player_info.update_intelligence(self._intelligence_field.value)
+        player_info.update_wisdom(self._wisdom_field.value)
+        player_info.update_charisma(self._charisma_field.value)
 
         save_root = Path(self._savefile.value).parent
         save_file = str(int(round(time.time() * 1000))) + ".zks"
