@@ -16,6 +16,7 @@ class PathfinderEditorWidget(BaseWidget):
         self._loadbutton = ControlButton('Load')
         self._name_field = ControlText('Name')
         self._money_field = ControlText('Money')
+        self._strength_field = ControlText('Strength')
         self._savebutton = ControlButton('Save')
         self._temp_path = Path('./tempdir/')
 
@@ -23,6 +24,7 @@ class PathfinderEditorWidget(BaseWidget):
             '_savefile',
             '_loadbutton',
             ('_name_field', '_money_field'),
+            '_strength_field',
             '_savebutton',
         ]
 
@@ -33,6 +35,7 @@ class PathfinderEditorWidget(BaseWidget):
         extract_file(Path(self._savefile.value), self._temp_path)
         self._name_field.value = PlayerInfo(self._temp_path).name()
         self._money_field.value = PlayerInfo(self._temp_path).money()
+        self._strength_field.value = PlayerInfo(self._temp_path).strength()
 
     def __update_save(self):
         player_info = PlayerInfo(self._temp_path)

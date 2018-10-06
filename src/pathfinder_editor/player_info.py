@@ -15,6 +15,12 @@ class PlayerInfo:
     def name(self):
         return self._main_character()["CustomName"]
 
+    def strength(self):
+        strength_container = self._main_character_stats()["Strength"]
+        if "PermanentValue" in strength_container:
+            return str(strength_container["PermanentValue"])
+        return "Unknown"
+
     def update_money(self, money):
         player_json = self._json(self._player_json_name)
         player_json['Money'] = int(money)
@@ -30,3 +36,6 @@ class PlayerInfo:
 
     def _main_character(self):
         return self._json(self._party_json_name)["m_EntityData"][0]["Descriptor"]
+
+    def _main_character_stats(self):
+        return self._main_character()["Stats"]
