@@ -69,3 +69,7 @@ class PathfinderEditorWidget(BaseWidget):
 
         persist_as_zip(save_root, save_file, self._temp_path)
         rmtree(self._temp_path)
+
+    def before_close_event(self):
+        if self._temp_path.exists():
+            rmtree(self._temp_path)
