@@ -1,5 +1,7 @@
 .DS_Store
 config.py.bak
+pathfinder_editor.build/*
+pathfinder_editor.bin
 
 ##########
 # Python #
