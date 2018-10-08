@@ -28,14 +28,19 @@ class PathfinderEditorWidget(BaseWidget):
         self._savebutton = ControlButton('Save')
         self._temp_path = Path('./tempdir/')
 
+        main_stats = [
+        ('_money_field'),
+        ('_strength_field', '_dexterity_field', '_constitution_field'),
+        ('_intelligence_field', '_wisdom_field', '_charisma_field'),
+        '_savebutton']
+        skills = []
+
         self._formset = [
             '_savefile',
             '_loadbutton',
             ('_name_field', '_name_value'),
-            ('_money_field'),
-            ('_strength_field', '_dexterity_field', '_constitution_field'),
-            ('_intelligence_field', '_wisdom_field', '_charisma_field'),
-            '_savebutton',
+            {'Main Stats': main_stats,
+            'Skills': skills}
         ]
 
         self._loadbutton.value = self.__load_save_file

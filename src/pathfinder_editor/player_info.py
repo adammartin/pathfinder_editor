@@ -69,7 +69,7 @@ class PlayerInfo:
         stats = _main_character_stats(data)
         attribute = stats[attribute_name]
         if "PermanentValue" in attribute:
-            return str(attribute["PermanentValue"])
+            return str(attribute["m_BaseValue"])
         return _load_attribute_ref(attribute["$ref"], stats)
 
     def _update_attribute_value(self, attribute_name, value):
@@ -77,7 +77,6 @@ class PlayerInfo:
         stats = _main_character_stats(data)
         attribute = stats[attribute_name]
         if "PermanentValue" in attribute:
-            attribute["PermanentValue"] = int(value)
             attribute["m_BaseValue"] = int(value)
         else:
             _update_attribute_ref(attribute["$ref"], stats, value)
@@ -96,7 +95,7 @@ def _load_attribute_ref(ref, stats):
     for stat, struct in stats.items():
         if "BaseStat" in struct:
             if struct["BaseStat"]["$id"] == ref:
-                return str(stats[stat]["BaseStat"]["PermanentValue"])
+                return str(stats[stat]["BaseStat"]["m_BaseValue"])
     return "Unknown"
 
 
@@ -104,5 +103,4 @@ def _update_attribute_ref(ref, stats, value):
     for stat, struct in stats.items():
         if "BaseStat" in struct:
             if struct["BaseStat"]["$id"] == ref:
-                stats[stat]["BaseStat"]["PermanentValue"] = int(value)
                 stats[stat]["BaseStat"]["m_BaseValue"] = int(value)
