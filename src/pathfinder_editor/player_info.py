@@ -1,20 +1,14 @@
-from file_utils import load_json, save_json
+from entity_info import EntityInfo, main_character, main_character_stats
 
 
-class PlayerInfo:
+class PlayerInfo(EntityInfo):
     # pylint: disable=too-many-public-methods
-    def __init__(self, path):
-        self._temp_path = path
-        self._party_json_name = "party.json"
-        self._player_json_name = 'player.json'
-        self._header_json_name = 'header.json'
-
     def money(self):
         return str(self._json(self._player_json_name)["Money"])
 
     def name(self):
         data = self._json(self._party_json_name)
-        return _main_character(data)["CustomName"]
+        return main_character(data)["CustomName"]
 
     def strength(self):
         return self._load_attribute_value("Strength")
@@ -63,12 +57,9 @@ class PlayerInfo:
         header_json["Name"] = "EDITED - " + header_json["Name"]
         save_json(self._temp_path, self._header_json_name, header_json)
 
-    def _json(self, json_file_name):
-        return load_json(self._temp_path, json_file_name)
-
     def _load_attribute_value(self, attribute_name):
         data = self._json(self._party_json_name)
-        stats = _main_character_stats(data)
+        stats = main_character_stats(data)
         attribute = stats[attribute_name]
         if "m_BaseValue" in attribute:
             return str(attribute["m_BaseValue"])
@@ -76,7 +67,7 @@ class PlayerInfo:
 
     def _update_attribute_value(self, attribute_name, value):
         data = self._json(self._party_json_name)
-        stats = _main_character_stats(data)
+        stats = main_character_stats(data)
         attribute = stats[attribute_name]
         if self._load_attribute_value(attribute_name) != int(value):
             if "m_BaseValue" in attribute:
@@ -84,14 +75,6 @@ class PlayerInfo:
             else:
                 _update_attribute_ref(attribute["$ref"], stats, value)
             save_json(self._temp_path, self._party_json_name, data)
-
-
-def _main_character(data):
-    return data["m_EntityData"][0]["Descriptor"]
-
-
-def _main_character_stats(data):
-    return _main_character(data)["Stats"]
 
 
 def _load_attribute_ref(ref, stats):
