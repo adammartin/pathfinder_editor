@@ -90,12 +90,19 @@ class SkillInfo(EntityInfo):
 
 def _load_skill_ref(ref, stats):
     for struct in stats.values():
-        if "m_Dependents" in struct and struct["m_Dependents"]:
-            for dependent in struct["m_Dependents"]:
-                if "$id" in dependent and dependent["$id"] == ref:
-                    return str(dependent["m_BaseValue"])
+        value = _load_direct_dependent_skill_ref(ref, struct)
+        if not value and "BaseStat" in struct:
+            value = _load_direct_dependent_skill_ref(ref, struct["BaseStat"])
+        if value:
+            return value
     return "Unknown"
 
+def _load_direct_dependent_skill_ref(ref, struct):
+    if "m_Dependents" in struct and struct["m_Dependents"]:
+        for dependent in struct["m_Dependents"]:
+            if "$id" in dependent and dependent["$id"] == ref:
+                return str(dependent["m_BaseValue"])
+    return None
 
 def _update_skill_ref(ref, stats, value):
     for struct in stats.values():
