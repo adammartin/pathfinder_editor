@@ -1,8 +1,8 @@
-from file_utils import load_json, save_json
+from file_utils import load_json
 
 
 class EntityInfo:
-    # pylint: disable=too-many-public-methods
+    # pylint: disable=too-few-public-methods
     def __init__(self, path):
         self._temp_path = path
         self._party_json_name = "party.json"

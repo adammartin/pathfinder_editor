@@ -43,8 +43,7 @@ class PathfinderEditorWidget(BaseWidget):
         main_stats = [
             ('_money_field'),
             ('_strength_field', '_dexterity_field', '_constitution_field'),
-            ('_intelligence_field', '_wisdom_field', '_charisma_field'),
-            '_savebutton'
+            ('_intelligence_field', '_wisdom_field', '_charisma_field')
         ]
         skills = [
             ('_athletics_field', '_arcana_field', '_knowledge_world_field'),
@@ -58,7 +57,8 @@ class PathfinderEditorWidget(BaseWidget):
             '_loadbutton',
             ('_name_field', '_name_value'),
             {'Main Stats': main_stats,
-             'Skills': skills}
+             'Skills': skills},
+            '_savebutton'
         ]
 
         self._loadbutton.value = self.__load_save_file
@@ -90,6 +90,7 @@ class PathfinderEditorWidget(BaseWidget):
 
     def __update_save(self):
         player_info = PlayerInfo(self._temp_path)
+        skill_info = SkillInfo(self._temp_path)
         player_info.update_money(self._money_field.value)
         player_info.update_header_name()
         player_info.update_strength(self._strength_field.value)
@@ -98,6 +99,17 @@ class PathfinderEditorWidget(BaseWidget):
         player_info.update_intelligence(self._intelligence_field.value)
         player_info.update_wisdom(self._wisdom_field.value)
         player_info.update_charisma(self._charisma_field.value)
+        skill_info.update_athletics(self._athletics_field.value)
+        skill_info.update_knowledge_arcana(self._arcana_field.value)
+        skill_info.update_knowledge_world(self._knowledge_world_field.value)
+        skill_info.update_mobility(self._mobility_field.value)
+        skill_info.update_lore_nature(self._lore_nature_field.value)
+        skill_info.update_lore_religion(self._lore_religion_field.value)
+        skill_info.update_perception(self._perception_field.value)
+        skill_info.update_persuasion(self._persuasion_field.value)
+        skill_info.update_stealth(self._stealth_field.value)
+        skill_info.update_theivery(self._theivery_field.value)
+        skill_info.update_use_magic_device(self._use_magic_device_field.value)
 
         save_root = Path(self._savefile.value).parent
         save_file = str(int(round(time.time() * 1000))) + ".zks"

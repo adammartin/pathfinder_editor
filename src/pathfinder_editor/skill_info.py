@@ -1,7 +1,9 @@
-from entity_info import EntityInfo, main_character, main_character_stats
+from entity_info import EntityInfo, main_character_stats
+from file_utils import save_json
+
 
 class SkillInfo(EntityInfo):
-
+    # pylint: disable=too-many-public-methods
     def athletics(self):
         return self._load_skill_value("SkillAthletics")
 
@@ -97,6 +99,7 @@ def _load_skill_ref(ref, stats):
             return value
     return "Unknown"
 
+
 def _load_direct_dependent_skill_ref(ref, struct):
     if "m_Dependents" in struct and struct["m_Dependents"]:
         for dependent in struct["m_Dependents"]:
@@ -104,9 +107,22 @@ def _load_direct_dependent_skill_ref(ref, struct):
                 return str(dependent["m_BaseValue"])
     return None
 
+
 def _update_skill_ref(ref, stats, value):
     for struct in stats.values():
-        if "m_Dependents" in struct and struct["m_Dependents"]:
-            for dependent in struct["m_Dependents"]:
-                if "$id" in dependent and dependent["$id"] == ref:
-                    dependent["m_BaseValue"] = int(value)
+        result = _update_direct_dependent_skills_ref(ref, struct, value)
+        if not result and "BaseStat" in struct:
+            result = _update_direct_dependent_skills_ref(ref,
+                                                         struct["BaseStat"],
+                                                         value)
+        if result:
+            break
+
+
+def _update_direct_dependent_skills_ref(ref, struct, value):
+    if "m_Dependents" in struct and struct["m_Dependents"]:
+        for dependent in struct["m_Dependents"]:
+            if "$id" in dependent and dependent["$id"] == ref:
+                dependent["m_BaseValue"] = int(value)
+                return int(value)
+    return None

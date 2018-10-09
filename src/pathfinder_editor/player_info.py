@@ -1,4 +1,5 @@
 from entity_info import EntityInfo, main_character, main_character_stats
+from file_utils import save_json
 
 
 class PlayerInfo(EntityInfo):
