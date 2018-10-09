@@ -2,6 +2,7 @@ from file_utils import load_json, save_json
 
 
 class PlayerInfo:
+    # pylint: disable=too-many-public-methods
     def __init__(self, path):
         self._temp_path = path
         self._party_json_name = "party.json"
@@ -35,8 +36,9 @@ class PlayerInfo:
 
     def update_money(self, money):
         player_json = self._json(self._player_json_name)
-        player_json['Money'] = int(money)
-        save_json(self._temp_path, self._player_json_name, player_json)
+        if player_json['Money'] != int(money):
+            player_json['Money'] = int(money)
+            save_json(self._temp_path, self._player_json_name, player_json)
 
     def update_strength(self, value):
         self._update_attribute_value("Strength", value)
@@ -68,7 +70,7 @@ class PlayerInfo:
         data = self._json(self._party_json_name)
         stats = _main_character_stats(data)
         attribute = stats[attribute_name]
-        if "PermanentValue" in attribute:
+        if "m_BaseValue" in attribute:
             return str(attribute["m_BaseValue"])
         return _load_attribute_ref(attribute["$ref"], stats)
 
@@ -76,11 +78,12 @@ class PlayerInfo:
         data = self._json(self._party_json_name)
         stats = _main_character_stats(data)
         attribute = stats[attribute_name]
-        if "PermanentValue" in attribute:
-            attribute["m_BaseValue"] = int(value)
-        else:
-            _update_attribute_ref(attribute["$ref"], stats, value)
-        save_json(self._temp_path, self._party_json_name, data)
+        if self._load_attribute_value(attribute_name) != int(value):
+            if "m_BaseValue" in attribute:
+                attribute["m_BaseValue"] = int(value)
+            else:
+                _update_attribute_ref(attribute["$ref"], stats, value)
+            save_json(self._temp_path, self._party_json_name, data)
 
 
 def _main_character(data):
