@@ -30,12 +30,6 @@ To install dependencies using pip execute the following command in development e
 pip install -r requirements.txt
 ```
 
-To install dependencies using pip in the production environment use the following command:
-
-```sh
-pip install -r requirements.prod.txt
-```
-
 To install the local directory for testing and execution purposes use the following command at the root of the project.
 
 ```sh

@@ -20,6 +20,7 @@ class PathfinderEditorWidget(BaseWidget):
         self._name_field = ControlLabel('Name:')
         self._name_value = ControlLabel('')
         self._money_field = ControlText('Money')
+        self._experience_field = ControlText('Experience')
         self._strength_field = ControlText('Strength')
         self._dexterity_field = ControlText('Dexterity')
         self._constitution_field = ControlText('Constitution')
@@ -41,7 +42,7 @@ class PathfinderEditorWidget(BaseWidget):
         self._temp_path = Path('./tempdir/')
 
         main_stats = [
-            ('_money_field'),
+            ('_money_field', '_experience_field'),
             ('_strength_field', '_dexterity_field', '_constitution_field'),
             ('_intelligence_field', '_wisdom_field', '_charisma_field')
         ]
@@ -70,6 +71,7 @@ class PathfinderEditorWidget(BaseWidget):
         skill_info = SkillInfo(self._temp_path)
         self._name_value.value = player_info.name()
         self._money_field.value = player_info.money()
+        self._experience_field.value = player_info.experience()
         self._strength_field.value = player_info.strength()
         self._dexterity_field.value = player_info.dexterity()
         self._constitution_field.value = player_info.constitution()
@@ -92,6 +94,7 @@ class PathfinderEditorWidget(BaseWidget):
         player_info = PlayerInfo(self._temp_path)
         skill_info = SkillInfo(self._temp_path)
         player_info.update_money(self._money_field.value)
+        player_info.update_experience(self._experience_field.value)
         player_info.update_header_name()
         player_info.update_strength(self._strength_field.value)
         player_info.update_dexterity(self._dexterity_field.value)
