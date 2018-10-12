@@ -1,1 +1,2 @@
-pyforms-gui==4.0.5
+wxPython==4.0.3
+pathlib==1.0.1

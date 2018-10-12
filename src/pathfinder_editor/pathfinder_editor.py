@@ -1,9 +1,12 @@
-from pathfinder_editor_widget import PathfinderEditorWidget
+import wx
+from pathfinder_editor_window import PathfinderEditorWindow
 
 
 def pathfinder_editor():
-    from pyforms import start_app
-    start_app(PathfinderEditorWidget, geometry=(200, 200, 800, 200))
+    app = wx.App()
+    frm = PathfinderEditorWindow(None, title='Pathfinder Editor')
+    frm.Show()
+    app.MainLoop()
 
 if __name__ == '__main__':
     pathfinder_editor()

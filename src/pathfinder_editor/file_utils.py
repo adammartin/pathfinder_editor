@@ -5,6 +5,7 @@ import os
 
 
 def extract_file(path, temp_dir_path):
+    temp_dir_path.mkdir()
     if path.is_file():
         with ZipFile(str(path.resolve()), 'r') as save_zip:
             save_zip.extractall(path=str(temp_dir_path.resolve()))
