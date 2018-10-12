@@ -7,4 +7,4 @@ set -e
 "$BUILD_SCRIPTS_DIR/analyze_python.sh"
 
 with_venv
-python -m nuitka --follow-imports "$PROJECT_DIR/src/pathfinder_editor/pathfinder_editor.py"
+python -m nuitka --standalone "$PROJECT_DIR/src/pathfinder_editor/pathfinder_editor.py"
