@@ -1,5 +1,5 @@
-from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, Label, StringVar, Entry
+from tkinter import BOTH, W
 from player_info import PlayerInfo
 from skill_info import SkillInfo
 from kingdom_info import KingdomInfo
@@ -90,7 +90,8 @@ class SkillInfoTab(Tab):
         self._persuasion_field = self._add_field(3, 1, 'Persuasion:')
         self._stealth_field = self._add_field(4, 0, 'Stealth:')
         self._theivery_field = self._add_field(4, 1, 'Theivery:')
-        self._use_magic_device_field = self._add_field(5, 0, 'Use Magic Device:')
+        self._use_magic_device_field = self._add_field(5, 0,
+                                                       'Use Magic Device:')
 
     def load_info(self, path):
         skill_info = SkillInfo(path)

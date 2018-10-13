@@ -1,13 +1,12 @@
 import time
 from pathlib import Path
 from shutil import rmtree
-from tkinter import *
-from tkinter import filedialog
-from tkinter import ttk
+from tkinter import Frame, filedialog, ttk, Menu, Label, StringVar
+from tkinter import LEFT, E, W, BOTH
 from file_utils import extract_file, persist_as_zip
 from player_info import PlayerInfo
 from widgets.tabs import Tabs
-from widgets.defaults import DEFAULT_BACKGROUND, default_style
+from widgets.defaults import DEFAULT_BACKGROUND
 
 
 class PathfinderTkWindow(Frame):
@@ -46,7 +45,7 @@ class PathfinderTkWindow(Frame):
         self.master.quit()
 
     def _file_open(self):
-        self.master.filename = filedialog.askopenfilename(title = "Select file")
+        self.master.filename = filedialog.askopenfilename(title="Select file")
         extract_file(Path(self.master.filename), self._temp_path)
         self._name_panel.load_info(self._temp_path)
         self._tabs.load_info(self._temp_path)
@@ -63,7 +62,9 @@ class NameFrame(ttk.Frame):
         label.configure(background=DEFAULT_BACKGROUND)
         label.pack(expand=1, side=LEFT, anchor=E)
         self._player_name = StringVar('')
-        self._player_name_field = Label(self, textvariable=self._player_name, borderwidth=1)
+        self._player_name_field = Label(self,
+                                        textvariable=self._player_name,
+                                        borderwidth=1)
         self._player_name_field.configure(background=DEFAULT_BACKGROUND)
         self._player_name_field.pack(expand=1, side=LEFT, anchor=W)
 
