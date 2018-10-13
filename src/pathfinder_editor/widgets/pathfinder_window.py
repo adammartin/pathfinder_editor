@@ -22,12 +22,21 @@ class PathfinderTkWindow(Frame):
     def _create_menu_bar(self):
         menubar = Menu(self.master)
         filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="Open", command=self._file_open)
-        filemenu.add_command(label="Save", command=self._save_and_destroy)
+        filemenu.add_command(label="Open",
+                             command=self._file_open,
+                             accelerator='Ctrl+o')
+        filemenu.add_command(label="Save",
+                             command=self._save_and_destroy,
+                             accelerator='Ctrl+s')
         filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=self.master.quit)
+        filemenu.add_command(label="Exit",
+                             command=self.master.quit,
+                             accelerator='Ctrl+q')
         menubar.add_cascade(label="File", menu=filemenu)
         self.master.config(menu=menubar)
+        self.bind_all("<Control-o>", self._file_open)
+        self.bind_all("<Control-s>", self._save_and_destroy)
+        self.bind_all("<Control-q>", self._quit)
 
     def _create_name_panel(self):
         name_frame = NameFrame(self)
@@ -37,14 +46,17 @@ class PathfinderTkWindow(Frame):
     def on_destroy(self):
         self._clean_temp_storage()
 
-    def _save_and_destroy(self):
+    def _quit(self, event=None):
+        self.master.quit()
+
+    def _save_and_destroy(self, event=None):
         self._tabs.update_info(self._temp_path)
         save_root = Path(self.master.filename).parent
         save_file = str(int(round(time.time() * 1000))) + ".zks"
         persist_as_zip(save_root, save_file, self._temp_path)
         self.master.quit()
 
-    def _file_open(self):
+    def _file_open(self, event=None):
         self.master.filename = filedialog.askopenfilename(title="Select file")
         extract_file(Path(self.master.filename), self._temp_path)
         self._name_panel.load_info(self._temp_path)

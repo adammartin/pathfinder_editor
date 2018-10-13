@@ -1,4 +1,4 @@
-from entity_info import EntityInfo, main_character, main_character_stats
+from entity_info import EntityInfo
 from file_utils import save_json
 
 
@@ -9,11 +9,11 @@ class PlayerInfo(EntityInfo):
 
     def name(self):
         data = self._json(self._party_json_name)
-        return main_character(data)["CustomName"]
+        return self.main_character(data)["CustomName"]
 
     def experience(self):
         data = self._json(self._party_json_name)
-        return str(main_character(data)["Progression"]["Experience"])
+        return str(self.main_character(data)["Progression"]["Experience"])
 
     def strength(self):
         return self._load_attribute_value("Strength")
@@ -45,7 +45,7 @@ class PlayerInfo(EntityInfo):
     def update_experience(self, value):
         if int(self.experience()) != value:
             data = self._json(self._party_json_name)
-            main_character(data)["Progression"]["Experience"] = int(value)
+            self.main_character(data)["Progression"]["Experience"] = int(value)
             save_json(self._temp_path, self._party_json_name, data)
 
     def update_dexterity(self, value):
@@ -70,7 +70,7 @@ class PlayerInfo(EntityInfo):
 
     def _load_attribute_value(self, attribute_name):
         data = self._json(self._party_json_name)
-        stats = main_character_stats(data)
+        stats = self.main_character_stats(data)
         attribute = stats[attribute_name]
         if "m_BaseValue" in attribute:
             return str(attribute["m_BaseValue"])
@@ -78,7 +78,7 @@ class PlayerInfo(EntityInfo):
 
     def _update_attribute_value(self, attribute_name, value):
         data = self._json(self._party_json_name)
-        stats = main_character_stats(data)
+        stats = self.main_character_stats(data)
         attribute = stats[attribute_name]
         if self._load_attribute_value(attribute_name) != int(value):
             if "m_BaseValue" in attribute:

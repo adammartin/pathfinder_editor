@@ -1,4 +1,4 @@
-from entity_info import EntityInfo, main_character_stats
+from entity_info import EntityInfo
 from file_utils import save_json
 
 
@@ -72,7 +72,7 @@ class SkillInfo(EntityInfo):
 
     def _load_skill_value(self, skill_name):
         data = self._json(self._party_json_name)
-        stats = main_character_stats(data)
+        stats = self.main_character_stats(data)
         skill = stats[skill_name]
         if "m_BaseValue" in skill:
             return str(skill["m_BaseValue"])
@@ -80,7 +80,7 @@ class SkillInfo(EntityInfo):
 
     def _update_skill_value(self, skill_name, value):
         data = self._json(self._party_json_name)
-        stats = main_character_stats(data)
+        stats = self.main_character_stats(data)
         skill = stats[skill_name]
         if self._load_skill_value(skill_name) != int(value):
             if "m_BaseValue" in skill:
