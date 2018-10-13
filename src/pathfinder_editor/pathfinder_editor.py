@@ -1,9 +1,18 @@
-from pathfinder_editor_widget import PathfinderEditorWidget
+import atexit
+from tkinter import *
+from widgets.defaults import default_style
+from widgets.pathfinder_window import PathfinderTkWindow
 
 
 def pathfinder_editor():
-    from pyforms import start_app
-    start_app(PathfinderEditorWidget, geometry=(200, 200, 800, 200))
+    root = Tk()
+    s = default_style()
+    root.title("Pathfinder Editor")
+    app = PathfinderTkWindow(master=root)
+    atexit.register(app.on_destroy)
+    app.mainloop()
+    root.destroy()
+
 
 if __name__ == '__main__':
     pathfinder_editor()
