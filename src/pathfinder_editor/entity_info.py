@@ -20,7 +20,7 @@ class EntityInfo:
     def main_character(self, data):
         for entity in data['m_EntityData']:
             if has_unique_id(entity, self.main_character_id):
-                return entity['Descriptor']
+                return search_for_player(entity)
         return None
 
     def main_character_stats(self, data):
@@ -29,3 +29,21 @@ class EntityInfo:
 
 def has_unique_id(entity, unique_id):
     return 'UniqueId' in entity and entity['UniqueId'] == unique_id
+
+def search_for_player(entity):
+    descriptor = entity['Descriptor']
+    if 'Stats' in descriptor:
+        return descriptor
+    ref = descriptor['$ref']
+    return search_for_caster(entity, ref)
+
+def search_for_caster(entity, ref):
+    if caster_ref_matches(entity['m_AutoUseAbility'], ref):
+        return entity['m_AutoUseAbility']['Caster']
+    return None
+
+def caster_ref_matches(ability, ref):
+    return is_caster(ability) and ability['Caster']['$id'] == ref
+
+def is_caster(ability):
+    return 'Caster' in ability and '$id' in ability['Caster']
