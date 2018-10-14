@@ -130,7 +130,8 @@ class KingdomInfoTab(Tab):
 
     def load_info(self, path):
         kingdom_info = KingdomInfo(path)
-        self._build_points_field.set(kingdom_info.build_points())
+        if kingdom_info.has_kingdom_data():
+            self._build_points_field.set(kingdom_info.build_points())
 
     def update_info(self, path):
         kingdom_info = KingdomInfo(path)
