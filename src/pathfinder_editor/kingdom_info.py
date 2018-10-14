@@ -6,7 +6,7 @@ class KingdomInfo(EntityInfo):
     # pylint: disable=too-many-public-methods
     def has_kingdom_data(self):
         data = self._json(self._player_json_name)
-        return 'Kingdom' in data and data['Kingdom'] != None
+        return 'Kingdom' in data and data['Kingdom'] is not None
 
     def build_points(self):
         data = self._json(self._player_json_name)
