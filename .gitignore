@@ -165,3 +165,6 @@ fabric.properties
 
 # Ignore collected data file
 *.xml
+
+# VSCode
+.vscode
