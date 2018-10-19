@@ -1,4 +1,4 @@
-from tkinter import ttk, Label, StringVar, Entry
+from tkinter import ttk, Label, StringVar, Entry, OptionMenu
 from tkinter import BOTH, W
 from player_info import PlayerInfo
 from skill_info import SkillInfo
@@ -36,6 +36,16 @@ class Tab():
         entry = Entry(self._panel, textvariable=variable)
         entry.grid(row=r, column=col+1, sticky=W)
         return variable
+        
+    def _add_dropdown(self, r, c, label_text, choices):
+        col = c*2
+        label = Label(self._panel, text=label_text, borderwidth=1)
+        label.configure(background=DEFAULT_BACKGROUND)
+        label.grid(row=r, column=col, sticky=W)
+        variable = StringVar()
+        entry = OptionMenu(self._panel, variable, *choices)
+        entry.grid(row=r, column=col+1, sticky=W)
+        return variable
 
 
 class PlayerInfoTab(Tab):
@@ -50,6 +60,17 @@ class PlayerInfoTab(Tab):
         self._intelligence = self._add_field(2, 1, 'Intelligence:')
         self._wisdom = self._add_field(3, 0, 'Wisdom:')
         self._charisma = self._add_field(3, 1, 'Charisma:')
+        self._alignment = self._add_dropdown(4, 0, 'Alignment:', { 
+            "Neutral",
+            "Chaotic Good",
+            "Neutral Good",
+            "Lawful Good",
+            "Lawful Neutral",
+            "Lawful Evil",
+            "Neutral Evil",
+            "Chaotic Evil",
+            "Chaotic Neutral",
+        })
         self._panel.config()
 
     def load_info(self, path):
@@ -62,6 +83,7 @@ class PlayerInfoTab(Tab):
         self._intelligence.set(player_info.intelligence())
         self._wisdom.set(player_info.wisdom())
         self._charisma.set(player_info.charisma())
+        self._alignment.set(player_info.alignment())
 
     def update_info(self, path):
         player_info = PlayerInfo(path)
@@ -74,6 +96,7 @@ class PlayerInfoTab(Tab):
         player_info.update_intelligence(self._intelligence.get())
         player_info.update_wisdom(self._wisdom.get())
         player_info.update_charisma(self._charisma.get())
+        player_info.update_alignment(self._alignment.get())
 
 
 class SkillInfoTab(Tab):
