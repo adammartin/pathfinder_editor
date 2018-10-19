@@ -2,7 +2,7 @@
 python --version 2>NUL
 if errorlevel 1 goto errorNoPython
 
-python src\pathfinder_editor\pathfinder_editor.py
+python %~dp0\src\pathfinder_editor\pathfinder_editor.py
 
 goto:eof
 

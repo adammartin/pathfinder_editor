@@ -1,6 +1,40 @@
+import math
 from entity_info import EntityInfo
 from file_utils import save_json
-import math
+
+
+def calculate_angle(x_axis, y_axis):
+    # CCW Angle starting east
+    angle = math.atan2(y_axis, x_axis) * 180 / math.pi
+    if angle < 0:
+        angle += 360
+    # let 0-45 equal chaotic good
+    # let -22.5-0 and 315-337.5 equal Chaotic Neutral
+    angle -= 22.5
+    return angle
+
+
+def calculate_alignment(x_axis, y_axis):
+    # pylint: disable=too-many-return-statements
+    angle = calculate_angle(x_axis, y_axis)
+    radius = math.sqrt(x_axis * x_axis + y_axis * y_axis)
+    if radius <= 0.4:
+        return "Neutral"
+    if angle >= 0 and angle < 45:
+        return "Chaotic Good"
+    if angle >= 45 and angle < 90:
+        return "Neutral Good"
+    if angle >= 90 and angle < 135:
+        return "Lawful Good"
+    if angle >= 135 and angle < 180:
+        return "Lawful Netural"
+    if angle >= 180 and angle < 225:
+        return "Lawful Evil"
+    if angle >= 225 and angle < 270:
+        return "Netural Evil"
+    if angle >= 270 and angle < 315:
+        return "Chaotic Evil"
+    return "Chaotic Neutral"
 
 
 class PlayerInfo(EntityInfo):
@@ -37,30 +71,10 @@ class PlayerInfo(EntityInfo):
     def alignment(self):
         data = self._json(self._party_json_name)
         descriptor = self.main_character(data)
-        x = descriptor['Alignment']['Vector']['x']
-        y = descriptor['Alignment']['Vector']['y']
-        angle = math.atan2(y, x) * 180 / math.pi #CCW Angle starting east
-        if angle < 0:
-             angle += 360
-        angle -= 22.5 #let 0-45 equal chaotic good and -22.5-0 and 315-337.5 equal Chaotic Neutral
-        radius = math.sqrt(x * x + y * y)
-        if radius <= 0.4:
-            return "Neutral"
-        if angle >= 0 and angle < 45:
-             return "Chaotic Good"
-        if angle >= 45 and angle < 90:
-            return "Neutral Good"
-        if angle >= 90 and angle < 135:
-             return "Lawful Good"
-        if angle >= 135 and angle < 180:
-             return "Lawful Netural"
-        if angle >= 180 and angle < 225:
-             return "Lawful Evil"
-        if angle >= 225 and angle < 270:
-             return "Netural Evil"
-        if angle >= 270 and angle < 315:
-             return "Chaotic Evil"
-        return "Chaotic Neutral"
+        x_axis = descriptor['Alignment']['Vector']['x']
+        y_axis = descriptor['Alignment']['Vector']['y']
+
+        return calculate_alignment(x_axis, y_axis)
 
     def update_money(self, money):
         player_json = self._json(self._player_json_name)
@@ -94,17 +108,17 @@ class PlayerInfo(EntityInfo):
 
     def update_alignment(self, value):
         alignments = {
-            "Neutral" : {"x" : 0, "y": 0},
-            "Chaotic Good" : {"x" : 0.707106769, "y": 0.707106769},
-            "Neutral Good" : {"x" : 0, "y": 1},
-            "Lawful Good" : {"x" : -0.707106769, "y": 0.707106769},
-            "Lawful Neutral" : {"x" : -1, "y": 0},
-            "Lawful Evil" : {"x" : -0.707106769, "y": -0.707106769},
-            "Neutral Evil" : {"x" : 0, "y": -1},
-            "Chaotic Evil" : {"x" : 0.707106769, "y": -0.707106769},
-            "Chaotic Neutral" : {"x" : 1, "y": 0},
+            "Neutral": {"x": 0, "y": 0},
+            "Chaotic Good": {"x": 0.707106769, "y": 0.707106769},
+            "Neutral Good": {"x": 0, "y": 1},
+            "Lawful Good": {"x": -0.707106769, "y": 0.707106769},
+            "Lawful Neutral": {"x": -1, "y": 0},
+            "Lawful Evil": {"x": -0.707106769, "y": -0.707106769},
+            "Neutral Evil": {"x": 0, "y": -1},
+            "Chaotic Evil": {"x": 0.707106769, "y": -0.707106769},
+            "Chaotic Neutral": {"x": 1, "y": 0},
         }
-        if not value in alignments:
+        if value not in alignments:
             return
         vector = alignments[value]
         data = self._json(self._party_json_name)

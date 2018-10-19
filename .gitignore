@@ -2,6 +2,7 @@
 config.py.bak
 pathfinder_editor.build/*
 pathfinder_editor.bin
+tempdir*
 
 ##########
 # Python #

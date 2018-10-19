@@ -1,9 +1,12 @@
-from tkinter import ttk, Label, StringVar, Entry, OptionMenu
-from tkinter import BOTH, W
+from tkinter import ttk, Label, StringVar, Entry, OptionMenu, Button
+from tkinter import BOTH, W, EW
 from player_info import PlayerInfo
 from skill_info import SkillInfo
 from kingdom_info import KingdomInfo
 from widgets.defaults import DEFAULT_BACKGROUND
+
+
+WARNING = "USE AT YOUR OWN RISK! Save these before you save your main changes."
 
 
 class Tabs():
@@ -13,12 +16,15 @@ class Tabs():
         self._player_tab = PlayerInfoTab(self._notebook)
         self._skill_tab = SkillInfoTab(self._notebook)
         self._kingdom_tab = KingdomInfoTab(self._notebook)
+        self._experimental_tab = ExperimentalInfoTab(self._notebook,
+                                                     parent.temp_path)
         self._notebook.pack(expand=1, fill=BOTH)
 
     def load_info(self, path):
         self._player_tab.load_info(path)
         self._skill_tab.load_info(path)
         self._kingdom_tab.load_info(path)
+        self._experimental_tab.load_info(path)
 
     def update_info(self, path):
         self._player_tab.update_info(path)
@@ -27,30 +33,40 @@ class Tabs():
 
 
 class Tab():
-    def _add_field(self, r, c, label_text):
-        col = c*2
+    # pylint: disable=too-few-public-methods
+    def __init__(self, notebook):
+        self._panel = ttk.Frame(notebook, style='Default.TFrame')
+
+    def _add_large_label(self, a_row, colspan, label_text):
+        label = Label(self._panel, text=label_text, borderwidth=1, fg='red')
+        label.configure(background=DEFAULT_BACKGROUND)
+        label.grid(row=a_row, columnspan=colspan, sticky=W)
+
+    def _add_field(self, a_row, a_col, label_text):
+        col = a_col*2
         label = Label(self._panel, text=label_text, borderwidth=1)
         label.configure(background=DEFAULT_BACKGROUND)
-        label.grid(row=r, column=col, sticky=W)
+        label.grid(row=a_row, column=col, sticky=W)
         variable = StringVar()
         entry = Entry(self._panel, textvariable=variable)
-        entry.grid(row=r, column=col+1, sticky=W)
+        entry.grid(row=a_row, column=col+1, sticky=W)
         return variable
-        
-    def _add_dropdown(self, r, c, label_text, choices):
-        col = c*2
+
+    def _add_dropdown(self, a_row, a_col, label_text, choices):
+        col = a_col*2
         label = Label(self._panel, text=label_text, borderwidth=1)
         label.configure(background=DEFAULT_BACKGROUND)
-        label.grid(row=r, column=col, sticky=W)
+        label.grid(row=a_row, column=col, sticky=W)
         variable = StringVar()
         entry = OptionMenu(self._panel, variable, *choices)
-        entry.grid(row=r, column=col+1, sticky=W)
+        entry.grid(row=a_row, column=col+1, sticky=EW)
         return variable
 
 
 class PlayerInfoTab(Tab):
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, notebook):
-        self._panel = ttk.Frame(notebook, style='Default.TFrame')
+        super(PlayerInfoTab, self).__init__(notebook)
         notebook.add(self._panel, text="Player")
         self._money = self._add_field(0, 0, 'Money:')
         self._experience = self._add_field(0, 1, 'Experience:')
@@ -60,17 +76,6 @@ class PlayerInfoTab(Tab):
         self._intelligence = self._add_field(2, 1, 'Intelligence:')
         self._wisdom = self._add_field(3, 0, 'Wisdom:')
         self._charisma = self._add_field(3, 1, 'Charisma:')
-        self._alignment = self._add_dropdown(4, 0, 'Alignment:', { 
-            "Neutral",
-            "Chaotic Good",
-            "Neutral Good",
-            "Lawful Good",
-            "Lawful Neutral",
-            "Lawful Evil",
-            "Neutral Evil",
-            "Chaotic Evil",
-            "Chaotic Neutral",
-        })
         self._panel.config()
 
     def load_info(self, path):
@@ -83,7 +88,6 @@ class PlayerInfoTab(Tab):
         self._intelligence.set(player_info.intelligence())
         self._wisdom.set(player_info.wisdom())
         self._charisma.set(player_info.charisma())
-        self._alignment.set(player_info.alignment())
 
     def update_info(self, path):
         player_info = PlayerInfo(path)
@@ -96,12 +100,46 @@ class PlayerInfoTab(Tab):
         player_info.update_intelligence(self._intelligence.get())
         player_info.update_wisdom(self._wisdom.get())
         player_info.update_charisma(self._charisma.get())
+
+
+class ExperimentalInfoTab(Tab):
+    def __init__(self, notebook, temp_path):
+        super(ExperimentalInfoTab, self).__init__(notebook)
+        self._temp_path = temp_path
+        notebook.add(self._panel, text="Experimental")
+        self._warning = self._add_large_label(0, 2, WARNING)
+        self._alignment = self._add_dropdown(1, 0, 'Alignment:', {
+            "Neutral",
+            "Chaotic Good",
+            "Neutral Good",
+            "Lawful Good",
+            "Lawful Neutral",
+            "Lawful Evil",
+            "Neutral Evil",
+            "Chaotic Evil",
+            "Chaotic Neutral",
+        })
+        self._save_button = Button(self._panel,
+                                   text="SAVE EXPERIMENTAL",
+                                   command=self.update_experimental)
+        self._save_button.grid(row=3, column=0, sticky=W)
+
+    def load_info(self, path):
+        player_info = PlayerInfo(path)
+        self._alignment.set(player_info.alignment())
+
+    def update_info(self, path):
+        pass
+
+    def update_experimental(self):
+        player_info = PlayerInfo(self._temp_path)
         player_info.update_alignment(self._alignment.get())
 
 
 class SkillInfoTab(Tab):
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, notebook):
-        self._panel = ttk.Frame(notebook, style='Default.TFrame')
+        super(SkillInfoTab, self).__init__(notebook)
         notebook.add(self._panel, text="Skills")
         self._athletics_field = self._add_field(0, 0, 'Athletics:')
         self._mobility_field = self._add_field(0, 1, 'Mobility:')
@@ -147,7 +185,7 @@ class SkillInfoTab(Tab):
 
 class KingdomInfoTab(Tab):
     def __init__(self, notebook):
-        self._panel = ttk.Frame(notebook, style='Default.TFrame')
+        super(KingdomInfoTab, self).__init__(notebook)
         notebook.add(self._panel, text="Kingdom")
         self._build_points_field = self._add_field(0, 0, 'Build Points:')
 

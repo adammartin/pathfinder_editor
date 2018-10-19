@@ -1,7 +1,16 @@
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
+from shutil import rmtree
+from pathlib import Path
 import json
 import io
 import os
+import time
+
+
+def save_game_file(file_name, temp_path):
+    save_root = Path(file_name).parent
+    save_file = str(int(round(time.time() * 1000))) + ".zks"
+    persist_as_zip(save_root, save_file, temp_path)
 
 
 def extract_file(path, temp_dir_path):
@@ -51,3 +60,8 @@ def _zipdir(dir_path, zip_file_path):
             file_info = ZipInfo(trim_path(archive_dir_path) + "/")
             out_file.writestr(file_info, "")
     out_file.close()
+
+
+def clean_temp_storage(path):
+    if path.exists():
+        rmtree(path)

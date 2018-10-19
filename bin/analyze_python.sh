@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-
 . "$BUILD_LIB_DIR/common.sh"
 . "$BUILD_LIB_DIR/with_venv.sh"
 
