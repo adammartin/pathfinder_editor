@@ -3,6 +3,19 @@ from entity_info import EntityInfo
 from file_utils import save_json
 
 
+ALIGNMENTS = {
+    "Neutral": {"x": 0, "y": 0},
+    "Chaotic Good": {"x": 0.707106769, "y": 0.707106769},
+    "Neutral Good": {"x": 0, "y": 1},
+    "Lawful Good": {"x": -0.707106769, "y": 0.707106769},
+    "Lawful Neutral": {"x": -1, "y": 0},
+    "Lawful Evil": {"x": -0.707106769, "y": -0.707106769},
+    "Neutral Evil": {"x": 0, "y": -1},
+    "Chaotic Evil": {"x": 0.707106769, "y": -0.707106769},
+    "Chaotic Neutral": {"x": 1, "y": 0},
+}
+
+
 def calculate_angle(x_axis, y_axis):
     # CCW Angle starting east
     angle = math.atan2(y_axis, x_axis) * 180 / math.pi
@@ -73,7 +86,6 @@ class PlayerInfo(EntityInfo):
         descriptor = self.main_character(data)
         x_axis = descriptor['Alignment']['Vector']['x']
         y_axis = descriptor['Alignment']['Vector']['y']
-
         return calculate_alignment(x_axis, y_axis)
 
     def update_money(self, money):
@@ -107,25 +119,13 @@ class PlayerInfo(EntityInfo):
         self._update_attribute_value("Charisma", value)
 
     def update_alignment(self, value):
-        alignments = {
-            "Neutral": {"x": 0, "y": 0},
-            "Chaotic Good": {"x": 0.707106769, "y": 0.707106769},
-            "Neutral Good": {"x": 0, "y": 1},
-            "Lawful Good": {"x": -0.707106769, "y": 0.707106769},
-            "Lawful Neutral": {"x": -1, "y": 0},
-            "Lawful Evil": {"x": -0.707106769, "y": -0.707106769},
-            "Neutral Evil": {"x": 0, "y": -1},
-            "Chaotic Evil": {"x": 0.707106769, "y": -0.707106769},
-            "Chaotic Neutral": {"x": 1, "y": 0},
-        }
-        if value not in alignments:
-            return
-        vector = alignments[value]
-        data = self._json(self._party_json_name)
-        descriptor = self.main_character(data)
-        descriptor['Alignment']['Vector'] = vector
-        descriptor['Alignment']['m_History'][-1]['Position'] = vector
-        save_json(self._temp_path, self._party_json_name, data)
+        if value != self.alignment():
+            vector = ALIGNMENTS[value]
+            data = self._json(self._party_json_name)
+            descriptor = self.main_character(data)
+            descriptor['Alignment']['Vector'] = vector
+            descriptor['Alignment']['m_History'][-1]['Position'] = vector
+            save_json(self._temp_path, self._party_json_name, data)
 
     def update_header_name(self):
         header_json = self._json(self._header_json_name)
