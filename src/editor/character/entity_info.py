@@ -1,4 +1,4 @@
-from character.file_utils import load_json
+from editor.character.file_utils import load_json
 
 
 class EntityInfo:

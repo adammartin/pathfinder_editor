@@ -5,15 +5,12 @@ from glob import glob
 
 setup(
     name='pathfinder_editor',
-    description='',
-    url='',
-
     author='craftsmanadam',
     author_email='',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 
     packages=find_packages('src'),
@@ -21,9 +18,5 @@ setup(
     entry_points='''
             [console_scripts]
             pathfinder_editor=pathfinder_editor.pathfinder_editor:pathfinder_editor
-    ''',
-
-    install_requires=[
-        'pyforms-gui'
-    ]
+    '''
 )

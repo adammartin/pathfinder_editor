@@ -1,6 +1,6 @@
 from tkinter import ttk, StringVar, Label, LEFT, E, W, BOTH
-from character.player_info import PlayerInfo
-from widgets.defaults import DEFAULT_BACKGROUND
+from editor.character.player_info import PlayerInfo
+from editor.widgets.defaults import DEFAULT_BACKGROUND
 
 
 class NameFrame(ttk.Frame):

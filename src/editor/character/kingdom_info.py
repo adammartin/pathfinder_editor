@@ -1,5 +1,5 @@
-from character.entity_info import EntityInfo
-from character.file_utils import save_json
+from editor.character.entity_info import EntityInfo
+from editor.character.file_utils import save_json
 
 
 class KingdomInfo(EntityInfo):

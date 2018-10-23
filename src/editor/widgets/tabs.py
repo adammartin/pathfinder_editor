@@ -1,9 +1,9 @@
 from tkinter import ttk, Label, StringVar, Entry, OptionMenu, Button
 from tkinter import BOTH, W, EW
-from character.player_info import PlayerInfo, ALIGNMENTS
-from character.skill_info import SkillInfo
-from character.kingdom_info import KingdomInfo
-from widgets.defaults import DEFAULT_BACKGROUND
+from editor.character.player_info import PlayerInfo, ALIGNMENTS
+from editor.character.skill_info import SkillInfo
+from editor.character.kingdom_info import KingdomInfo
+from editor.widgets.defaults import DEFAULT_BACKGROUND
 
 
 WARNING = "USE AT YOUR OWN RISK! Save these before you save your main changes."
