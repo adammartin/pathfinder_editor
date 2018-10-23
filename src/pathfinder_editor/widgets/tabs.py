@@ -1,6 +1,6 @@
 from tkinter import ttk, Label, StringVar, Entry, OptionMenu, Button
 from tkinter import BOTH, W, EW
-from player_info import PlayerInfo
+from player_info import PlayerInfo, ALIGNMENTS
 from skill_info import SkillInfo
 from kingdom_info import KingdomInfo
 from widgets.defaults import DEFAULT_BACKGROUND
@@ -44,9 +44,7 @@ class Tab():
 
     def _add_field(self, a_row, a_col, label_text):
         col = a_col*2
-        label = Label(self._panel, text=label_text, borderwidth=1)
-        label.configure(background=DEFAULT_BACKGROUND)
-        label.grid(row=a_row, column=col, sticky=W)
+        label = self._add_label(a_row, col, label_text)
         variable = StringVar()
         entry = Entry(self._panel, textvariable=variable)
         entry.grid(row=a_row, column=col+1, sticky=W)
@@ -54,13 +52,17 @@ class Tab():
 
     def _add_dropdown(self, a_row, a_col, label_text, choices):
         col = a_col*2
-        label = Label(self._panel, text=label_text, borderwidth=1)
-        label.configure(background=DEFAULT_BACKGROUND)
-        label.grid(row=a_row, column=col, sticky=W)
+        label = self._add_label(a_row, col, label_text)
         variable = StringVar()
         entry = OptionMenu(self._panel, variable, *choices)
         entry.grid(row=a_row, column=col+1, sticky=EW)
         return variable
+
+    def _add_label(self, a_row, a_col, label_text):
+        label = Label(self._panel, text=label_text, borderwidth=1)
+        label.configure(background=DEFAULT_BACKGROUND)
+        label.grid(row=a_row, column=a_col, sticky=W)
+        return label
 
 
 class PlayerInfoTab(Tab):
@@ -108,17 +110,8 @@ class ExperimentalInfoTab(Tab):
         self._temp_path = temp_path
         notebook.add(self._panel, text="Experimental")
         self._warning = self._add_large_label(0, 2, WARNING)
-        self._alignment = self._add_dropdown(1, 0, 'Alignment:', {
-            "Neutral",
-            "Chaotic Good",
-            "Neutral Good",
-            "Lawful Good",
-            "Lawful Neutral",
-            "Lawful Evil",
-            "Neutral Evil",
-            "Chaotic Evil",
-            "Chaotic Neutral",
-        })
+        self._alignment = self._add_dropdown(1, 0, 'Alignment:',
+                                             ALIGNMENTS.keys())
         self._save_button = Button(self._panel,
                                    text="SAVE EXPERIMENTAL",
                                    command=self.update_experimental)
