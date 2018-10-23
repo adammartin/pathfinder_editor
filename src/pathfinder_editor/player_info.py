@@ -1,5 +1,5 @@
 import math
-from entity_info import EntityInfo
+from character.entity_info import EntityInfo
 from file_utils import save_json
 
 
