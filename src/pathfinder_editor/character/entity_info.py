@@ -1,4 +1,4 @@
-from file_utils import load_json
+from character.file_utils import load_json
 
 
 class EntityInfo:

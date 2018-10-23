@@ -1,5 +1,5 @@
 from tkinter import ttk, StringVar, Label, LEFT, E, W, BOTH
-from player_info import PlayerInfo
+from character.player_info import PlayerInfo
 from widgets.defaults import DEFAULT_BACKGROUND
 
 

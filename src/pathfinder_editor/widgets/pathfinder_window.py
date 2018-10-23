@@ -1,6 +1,6 @@
 from pathlib import Path
 from tkinter import Frame, filedialog, Menu
-from file_utils import extract_file, save_game_file, clean_temp_storage
+from character.file_utils import extract_file, save_game_file, clean_temp_storage
 from widgets.tabs import Tabs
 from widgets.name_frame import NameFrame
 

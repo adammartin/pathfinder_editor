@@ -1,8 +1,8 @@
 from tkinter import ttk, Label, StringVar, Entry, OptionMenu, Button
 from tkinter import BOTH, W, EW
-from player_info import PlayerInfo, ALIGNMENTS
-from skill_info import SkillInfo
-from kingdom_info import KingdomInfo
+from character.player_info import PlayerInfo, ALIGNMENTS
+from character.skill_info import SkillInfo
+from character.kingdom_info import KingdomInfo
 from widgets.defaults import DEFAULT_BACKGROUND
 
 
