@@ -11,4 +11,4 @@ set_dirs () {
 set_dirs
 
 export PYTHON_FOR_VENV=python3.6
-export PYTHON_PACKAGE_NAME='pathfinder_editor'
+export PYTHON_PACKAGE_NAME='editor'

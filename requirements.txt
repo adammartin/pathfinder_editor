@@ -9,7 +9,8 @@ nuitka==0.6.0.3
 
 # testing
 coverage==4.0.1
-pytest==3.2.2
+pytest==3.9.2
+pytest-helpers-namespace==2017.11.11
 pytest-cov==2.5.1
 httpretty==0.9.4
 freezegun==0.3.10

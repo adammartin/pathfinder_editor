@@ -44,7 +44,7 @@ class Tab():
 
     def _add_field(self, a_row, a_col, label_text):
         col = a_col*2
-        label = self._add_label(a_row, col, label_text)
+        self._add_label(a_row, col, label_text)
         variable = StringVar()
         entry = Entry(self._panel, textvariable=variable)
         entry.grid(row=a_row, column=col+1, sticky=W)
@@ -52,7 +52,7 @@ class Tab():
 
     def _add_dropdown(self, a_row, a_col, label_text, choices):
         col = a_col*2
-        label = self._add_label(a_row, col, label_text)
+        self._add_label(a_row, col, label_text)
         variable = StringVar()
         entry = OptionMenu(self._panel, variable, *choices)
         entry.grid(row=a_row, column=col+1, sticky=EW)
