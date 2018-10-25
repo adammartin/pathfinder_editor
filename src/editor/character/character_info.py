@@ -31,7 +31,10 @@ class CharacterInfo():
         descriptor = self._main_character()
         x_axis = descriptor['Alignment']['Vector']['x']
         y_axis = descriptor['Alignment']['Vector']['y']
-        return calculate_alignment(x_axis, y_axis)
+        return _calculate_alignment(x_axis, y_axis)
+
+    def strength(self):
+        return self._load_attribute_value('Strength')
 
     def update_alignment(self, value):
         if value != self.alignment():
@@ -40,74 +43,96 @@ class CharacterInfo():
             descriptor['Alignment']['Vector'] = vector
             descriptor['Alignment']['m_History'][-1]['Position'] = vector
 
+    def update_strength(self, value):
+        self._update_attribute_value('Strength', value)
+
     def _main_character(self):
         for entity in self.party_data['m_EntityData']:
-            if has_unique_id(entity, self.key['m_UniqueId']):
-                return search_for_player(entity)
+            if _has_unique_id(entity, self.key['m_UniqueId']):
+                return _search_for_player(entity)
         return None
 
+    def _main_character_stats(self):
+        return _search_for_stats(self._main_character())
 
-def has_unique_id(entity, unique_id):
+    def _load_attribute_value(self, attribute_name):
+        stats = self._main_character_stats()
+        attribute = stats[attribute_name]
+        if 'm_BaseValue' in attribute:
+            return str(attribute['m_BaseValue'])
+        return _load_attribute_ref(attribute['$ref'], stats)
+
+    def _update_attribute_value(self, attribute_name, value):
+        stats = self._main_character_stats()
+        attribute = stats[attribute_name]
+        if self._load_attribute_value(attribute_name) != int(value):
+            if 'm_BaseValue' in attribute:
+                attribute['m_BaseValue'] = int(value)
+            else:
+                _update_attribute_ref(attribute['$ref'], stats, value)
+
+
+def _has_unique_id(entity, unique_id):
     return 'UniqueId' in entity and entity['UniqueId'] == unique_id
 
 
-def search_for_player(entity):
+def _search_for_player(entity):
     descriptor = entity['Descriptor']
     if 'Stats' in descriptor:
         return descriptor
     ref = descriptor['$ref']
-    return search_for_caster(entity, ref)
+    return _search_for_caster(entity, ref)
 
 
-def search_for_caster(entity, ref):
+def _search_for_caster(entity, ref):
     if caster_ref_matches(entity['m_AutoUseAbility'], ref):
         return entity['m_AutoUseAbility']['Caster']
     return None
 
 
-def caster_ref_matches(ability, ref):
-    return is_caster(ability) and ability['Caster']['$id'] == ref
+def _caster_ref_matches(ability, ref):
+    return _is_caster(ability) and ability['Caster']['$id'] == ref
 
 
-def is_caster(ability):
+def _is_caster(ability):
     return 'Caster' in ability and '$id' in ability['Caster']
 
 
-def search_for_stats(player):
+def _search_for_stats(player):
     stats = player['Stats']
     if '$id' in stats:
         return stats
-    return search_for_stats_in_inventory(player)
+    return _search_for_stats_in_inventory(player)
 
 
-def search_for_stats_in_inventory(player):
+def _search_for_stats_in_inventory(player):
     ref = player['Stats']['$ref']
     for item in player['m_Inventory']['m_Items']:
         for child in item.values():
-            result = recursive_search(child, ref)
-            if id_matches(result, ref):
+            result = _recursive_search(child, ref)
+            if _id_matches(result, ref):
                 return result
     return None
 
 
-def recursive_search(child, ref):
+def _recursive_search(child, ref):
     if not isinstance(child, dict):
         return None
-    elif id_matches(child, ref):
+    elif _id_matches(child, ref):
         return child
     else:
         for value in child.values():
-            result = recursive_search(value, ref)
-            if id_matches(result, ref):
+            result = _recursive_search(value, ref)
+            if _id_matches(result, ref):
                 return result
     return None
 
 
-def id_matches(entity, ref):
+def _id_matches(entity, ref):
     return entity is not None and '$id' in entity and entity['$id'] == ref
 
 
-def calculate_angle(x_axis, y_axis):
+def _calculate_angle(x_axis, y_axis):
     # CCW Angle starting east
     angle = (math.atan2(y_axis, x_axis) * 180 / math.pi) - 22.5
     if angle < 0:
@@ -115,8 +140,8 @@ def calculate_angle(x_axis, y_axis):
     return angle
 
 
-def calculate_alignment(x_axis, y_axis):
-    angle = calculate_angle(x_axis, y_axis)
+def _calculate_alignment(x_axis, y_axis):
+    angle = _calculate_angle(x_axis, y_axis)
     radius = math.sqrt(x_axis * x_axis + y_axis * y_axis)
     for align, data in ALIGNMENTS.items():
         if 'radius' in data and radius <= data['radius']:
@@ -124,3 +149,18 @@ def calculate_alignment(x_axis, y_axis):
         elif angle >= data['angle_min'] and angle < data['angle_max']:
             return align
     return 'UNKOWN'
+
+
+def _load_attribute_ref(ref, stats):
+    for stat, struct in stats.items():
+        if 'BaseStat' in struct:
+            if struct['BaseStat']['$id'] == ref:
+                return str(stats[stat]['BaseStat']['m_BaseValue'])
+    return 'UNKOWN'
+
+
+def _update_attribute_ref(ref, stats, value):
+    for stat, struct in stats.items():
+        if 'BaseStat' in struct:
+            if struct['BaseStat']['$id'] == ref:
+                stats[stat]['BaseStat']['m_BaseValue'] = int(value)
