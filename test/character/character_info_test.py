@@ -58,3 +58,20 @@ def test_update_strength():
     character.update_strength(new_strength)
     assert character.strength() == str(new_strength)
     assert character.strength() == str(stats['SkillAthletics']['BaseStat']['m_BaseValue'])
+
+
+def test_dexterity():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    stats = stats_data(main_character(party))
+    dexterity = stats['Dexterity']['m_BaseValue']
+    character = CharacterInfo(party, MAIN_KEY)
+    assert character.dexterity() == str(dexterity)
+
+def test_update_dexterity():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    stats = stats_data(main_character(party))
+    character = CharacterInfo(party, MAIN_KEY)
+    new_dexterity = str(int(character.dexterity()) + 6)
+    character.update_dexterity(new_dexterity)
+    assert character.dexterity() == str(new_dexterity)
+    assert character.dexterity() == str(stats['Dexterity']['m_BaseValue'])

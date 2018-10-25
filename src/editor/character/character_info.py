@@ -36,6 +36,9 @@ class CharacterInfo():
     def strength(self):
         return self._load_attribute_value('Strength')
 
+    def dexterity(self):
+        return self._load_attribute_value('Dexterity')
+
     def update_alignment(self, value):
         if value != self.alignment():
             vector = ALIGNMENTS[value]
@@ -45,6 +48,9 @@ class CharacterInfo():
 
     def update_strength(self, value):
         self._update_attribute_value('Strength', value)
+
+    def update_dexterity(self, value):
+        self._update_attribute_value('Dexterity', value)
 
     def _main_character(self):
         for entity in self.party_data['m_EntityData']:
