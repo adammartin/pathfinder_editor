@@ -1,4 +1,3 @@
-import json
 import pytest
 from editor.character.character_info import CharacterInfo
 

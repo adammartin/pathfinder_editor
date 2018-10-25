@@ -15,6 +15,160 @@ def player_base(money, id):
 
 
 @pytest.helpers.register
+def main_stat_block():
+    return {
+        '$id': '6544',
+        'Charisma': {
+            '$id': '6557',
+            'm_BaseValue': 14,
+            'm_Dependents': [
+                {
+                    '$id': '6559',
+                    'm_BaseValue': 6
+                },
+                {
+                    '$id': '6564',
+                    'm_BaseValue': 0
+                }
+            ]
+        },
+        'Constitution': {
+            '$id': '6568',
+            'm_BaseValue': 14,
+            'm_Dependents': [
+                {
+                    '$ref': '6545'
+                },
+                {
+                    '$id': '6570',
+                    'm_BaseValue': 5
+                }
+            ]
+        },
+        'Dexterity': {
+            '$id': '6571',
+            'm_BaseValue': 19,
+            'm_Dependents': [
+                {
+                    '$ref': '6548'
+                },
+                {
+                    '$id': '6573',
+                    'm_BaseValue': 5
+                },
+                {
+                    '$id': '6574',
+                    'm_BaseValue': 5
+                },
+                {
+                    '$id': '6576',
+                    'm_BaseValue': 0
+                },
+                {
+                    '$id': '6578',
+                    'm_BaseValue': 2
+                },
+                {
+                    '$id': '6581',
+                    'm_BaseValue': 0
+                }
+            ]
+        },
+        'Initiative': {
+            '$ref': '6581'
+        },
+        'Intelligence': {
+            '$id': '6583',
+            'm_BaseValue': 12,
+            'm_Dependents': [
+                {
+                    '$id': '6585',
+                    'm_BaseValue': 0
+                },
+                {
+                    '$id': '6587',
+                    'm_BaseValue': 1
+                }
+            ]
+        },
+        'SaveWill': {
+            '$id': '6589',
+            'BaseStat': {
+                '$id': '6590',
+                'm_BaseValue': 16,
+                'm_Dependents': [
+                    {
+                        '$ref': '6589'
+                    },
+                    {
+                        '$id': '6592',
+                        'm_BaseValue': 6
+                    },
+                    {
+                        '$id': '6594',
+                        'm_BaseValue': 0
+                    },
+                    {
+                        '$id': '6596',
+                        'm_BaseValue': 0
+                    }
+                ]
+            },
+            'm_BaseValue': 5
+        },
+        'SkillAthletics': {
+            '$id': '6598',
+            'BaseStat': {
+                '$id': '6599',
+                'm_BaseValue': 14,
+                'm_Dependents': [
+                    {
+                        '$ref': '6598'
+                    }
+                ]
+            },
+            'm_BaseValue': 6
+        },
+        'SkillKnowledgeArcana': {
+            '$ref': '6585'
+        },
+        'SkillKnowledgeWorld': {
+            '$ref': '6587'
+        },
+        'SkillLoreNature': {
+            '$ref': '6594'
+        },
+        'SkillLoreReligion': {
+            '$ref': '6596'
+        },
+        'SkillMobility': {
+            '$ref': '6574'
+        },
+        'SkillPerception': {
+            '$ref': '6592'
+        },
+        'SkillPersuasion': {
+            '$ref': '6559'
+        },
+        'SkillStealth': {
+            '$ref': '6578'
+        },
+        'SkillThievery': {
+            '$ref': '6576'
+        },
+        'SkillUseMagicDevice': {
+            '$ref': '6564'
+        },
+        'Strength': {
+            '$ref': '6599'
+        },
+        'Wisdom': {
+            '$ref': '6590'
+        }
+    }
+
+
+@pytest.helpers.register
 def main_character(character_id, companion):
     return {
         '$id': '99',
@@ -43,156 +197,7 @@ def main_character(character_id, companion):
             'Progression': {
                 'Experience': 1234
             },
-            'Stats': {
-                '$id': '6544',
-                'Charisma': {
-                    '$id': '6557',
-                    'm_BaseValue': 14,
-                    'm_Dependents': [
-                        {
-                            '$id': '6559',
-                            'm_BaseValue': 6
-                        },
-                        {
-                            '$id': '6564',
-                            'm_BaseValue': 0
-                        }
-                    ]
-                },
-                'Constitution': {
-                    '$id': '6568',
-                    'm_BaseValue': 14,
-                    'm_Dependents': [
-                        {
-                            '$ref': '6545'
-                        },
-                        {
-                            '$id': '6570',
-                            'm_BaseValue': 5
-                        }
-                    ]
-                },
-                'Dexterity': {
-                    '$id': '6571',
-                    'm_BaseValue': 19,
-                    'm_Dependents': [
-                        {
-                            '$ref': '6548'
-                        },
-                        {
-                            '$id': '6573',
-                            'm_BaseValue': 5
-                        },
-                        {
-                            '$id': '6574',
-                            'm_BaseValue': 5
-                        },
-                        {
-                            '$id': '6576',
-                            'm_BaseValue': 0
-                        },
-                        {
-                            '$id': '6578',
-                            'm_BaseValue': 2
-                        },
-                        {
-                            '$id': '6581',
-                            'm_BaseValue': 0
-                        }
-                    ]
-                },
-                'Initiative': {
-                    '$ref': '6581'
-                },
-                'Intelligence': {
-                    '$id': '6583',
-                    'm_BaseValue': 12,
-                    'm_Dependents': [
-                        {
-                            '$id': '6585',
-                            'm_BaseValue': 0
-                        },
-                        {
-                            '$id': '6587',
-                            'm_BaseValue': 1
-                        }
-                    ]
-                },
-                'SaveWill': {
-                    '$id': '6589',
-                    'BaseStat': {
-                        '$id': '6590',
-                        'm_BaseValue': 16,
-                        'm_Dependents': [
-                            {
-                                '$ref': '6589'
-                            },
-                            {
-                                '$id': '6592',
-                                'm_BaseValue': 6
-                            },
-                            {
-                                '$id': '6594',
-                                'm_BaseValue': 0
-                            },
-                            {
-                                '$id': '6596',
-                                'm_BaseValue': 0
-                            }
-                        ]
-                    },
-                    'm_BaseValue': 5
-                },
-                'SkillAthletics': {
-                    '$id': '6598',
-                    'BaseStat': {
-                        '$id': '6599',
-                        'm_BaseValue': 14,
-                        'm_Dependents': [
-                            {
-                                '$ref': '6598'
-                            }
-                        ]
-                    },
-                    'm_BaseValue': 6
-                },
-                'SkillKnowledgeArcana': {
-                    '$ref': '6585'
-                },
-                'SkillKnowledgeWorld': {
-                    '$ref': '6587'
-                },
-                'SkillLoreNature': {
-                    '$ref': '6594'
-                },
-                'SkillLoreReligion': {
-                    '$ref': '6596'
-                },
-                'SkillMobility': {
-                    '$ref': '6574'
-                },
-                'SkillPerception': {
-                    '$ref': '6592'
-                },
-                'SkillPersuasion': {
-                    '$ref': '6559'
-                },
-                'SkillStealth': {
-                    '$ref': '6578'
-                },
-                'SkillThievery': {
-                    '$ref': '6576'
-                },
-                'SkillUseMagicDevice': {
-                    '$ref': '6564'
-                },
-                'Strength': {
-                    '$ref': '6599'
-                },
-                'Wisdom': {
-                    '$ref': '6590'
-                }
-            },
+            'Stats': main_stat_block(),
             'm_Inventory': {
                 'm_Items': [
                     {
