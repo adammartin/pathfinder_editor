@@ -23,7 +23,21 @@ def main_character(character_id, companion):
                 'Vector': {
                     'x': 0,
                     'y': 0
-                }
+                },
+                'm_History': [
+                    {
+                        'Position': {
+                            'x': -0.713193357,
+                            'y': 0.7009674
+                        }
+                    },
+                    {
+                        'Position': {
+                            'x': -0.6990331,
+                            'y': 0.715089262
+                        }
+                    }
+                ]
             },
             'CustomName': 'Main Character',
             'Progression': {

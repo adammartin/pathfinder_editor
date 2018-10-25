@@ -7,14 +7,33 @@ MAIN_CHAR_ID = '1'
 COMPANION_ID = '77c11edb92ce0fd408ad96b40fd27121'
 COMP_UNIT_ID = '420'
 MONEY = 1000
-KEY = {
+MAIN_KEY = {
     'm_UniqueId': MAIN_CHAR_ID
 }
 
 
 def test_name():
-    party_json = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
-    companion = pytest.helpers.companion(COMP_UNIT_ID, COMPANION_ID)
-    main_character = pytest.helpers.main_character(MAIN_CHAR_ID, companion)
-    character = CharacterInfo(party_json, KEY)
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    main_character = party['m_EntityData'][0]
+    character = CharacterInfo(party, MAIN_KEY)
     assert character.name() == main_character['Descriptor']['CustomName']
+
+
+def test_alignment():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CharacterInfo(party, MAIN_KEY)
+    assert character.alignment() == 'Neutral'
+
+
+def test_update_alignment():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CharacterInfo(party, MAIN_KEY)
+    main_character = party['m_EntityData'][0]
+    new_alignment = 'Neutral Good'
+    character.update_alignment(new_alignment)
+    alignment_data = main_character['Descriptor']['Alignment']
+    assert character.alignment() == new_alignment
+    assert alignment_data['Vector']['x'] == 0
+    assert alignment_data['Vector']['y'] == 1
+    assert alignment_data['m_History'][-1]['Position']['x'] == 0
+    assert alignment_data['m_History'][-1]['Position']['y'] == 1
