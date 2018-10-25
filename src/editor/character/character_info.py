@@ -1,4 +1,5 @@
 import math
+from editor.character.stat_info import StatInfo
 
 
 ALIGNMENTS = {
@@ -23,6 +24,7 @@ class CharacterInfo():
     def __init__(self, party_data, key):
         self.party_data = party_data
         self.key = key
+        self.stats = StatInfo(self._main_character_stats())
 
     def name(self):
         return self._main_character()['CustomName']
@@ -34,10 +36,10 @@ class CharacterInfo():
         return _calculate_alignment(x_axis, y_axis)
 
     def strength(self):
-        return self._load_attribute_value('Strength')
+        return self.stats.strength()
 
     def dexterity(self):
-        return self._load_attribute_value('Dexterity')
+        return self.stats.dexterity()
 
     def update_alignment(self, value):
         if value != self.alignment():
@@ -47,10 +49,10 @@ class CharacterInfo():
             descriptor['Alignment']['m_History'][-1]['Position'] = vector
 
     def update_strength(self, value):
-        self._update_attribute_value('Strength', value)
+        self.stats.update_strength(value)
 
     def update_dexterity(self, value):
-        self._update_attribute_value('Dexterity', value)
+        self.stats.update_dexterity(value)
 
     def _main_character(self):
         for entity in self.party_data['m_EntityData']:
@@ -60,22 +62,6 @@ class CharacterInfo():
 
     def _main_character_stats(self):
         return _search_for_stats(self._main_character())
-
-    def _load_attribute_value(self, attribute_name):
-        stats = self._main_character_stats()
-        attribute = stats[attribute_name]
-        if 'm_BaseValue' in attribute:
-            return str(attribute['m_BaseValue'])
-        return _load_attribute_ref(attribute['$ref'], stats)
-
-    def _update_attribute_value(self, attribute_name, value):
-        stats = self._main_character_stats()
-        attribute = stats[attribute_name]
-        if self._load_attribute_value(attribute_name) != int(value):
-            if 'm_BaseValue' in attribute:
-                attribute['m_BaseValue'] = int(value)
-            else:
-                _update_attribute_ref(attribute['$ref'], stats, value)
 
 
 def _has_unique_id(entity, unique_id):
@@ -155,18 +141,3 @@ def _calculate_alignment(x_axis, y_axis):
         elif angle >= data['angle_min'] and angle < data['angle_max']:
             return align
     return 'UNKOWN'
-
-
-def _load_attribute_ref(ref, stats):
-    for stat, struct in stats.items():
-        if 'BaseStat' in struct:
-            if struct['BaseStat']['$id'] == ref:
-                return str(stats[stat]['BaseStat']['m_BaseValue'])
-    return 'UNKOWN'
-
-
-def _update_attribute_ref(ref, stats, value):
-    for stat, struct in stats.items():
-        if 'BaseStat' in struct:
-            if struct['BaseStat']['$id'] == ref:
-                stats[stat]['BaseStat']['m_BaseValue'] = int(value)

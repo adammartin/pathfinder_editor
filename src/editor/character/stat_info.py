@@ -5,8 +5,14 @@ class StatInfo():
     def strength(self):
         return self._load_attribute_value('Strength')
 
+    def dexterity(self):
+        return self._load_attribute_value('Dexterity')
+
     def update_strength(self, value):
         return self._update_attribute_value('Strength', value)
+
+    def update_dexterity(self, value):
+        self._update_attribute_value('Dexterity', value)
 
     def _load_attribute_value(self, attribute_name):
         attribute = self._stat_block[attribute_name]
