@@ -63,3 +63,19 @@ def test_update_intelligence():
     stat_info.update_intelligence(new_intelligence)
     assert stat_info.intelligence() == str(new_intelligence)
     assert stat_info.intelligence() == str(stats['Intelligence']['m_BaseValue'])
+
+
+def test_wisdom():
+    stats = pytest.helpers.main_stat_block()
+    wisdom = str(stats['SaveWill']['BaseStat']['m_BaseValue'])
+    stat_info = StatInfo(stats)
+    assert stat_info.wisdom() == str(wisdom)
+
+
+def test_update_wisdom():
+    stats = pytest.helpers.main_stat_block()
+    stat_info = StatInfo(stats)
+    new_wisdom = str(int(stat_info.wisdom()) + 6)
+    stat_info.update_wisdom(new_wisdom)
+    assert stat_info.wisdom() == str(new_wisdom)
+    assert stat_info.wisdom() == str(stats['SaveWill']['BaseStat']['m_BaseValue'])
