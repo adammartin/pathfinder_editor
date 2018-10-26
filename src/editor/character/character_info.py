@@ -1,5 +1,5 @@
 import math
-from editor.character.stat_info import StatInfo
+from editor.character import stat_info
 
 
 ALIGNMENTS = {
@@ -24,7 +24,7 @@ class CharacterInfo():
     def __init__(self, party_data, key):
         self.party_data = party_data
         self.key = key
-        self.stats = StatInfo(self._main_character_stats())
+        self.stats = stat_info.StatInfo(self._main_character_stats())
 
     def name(self):
         return self._main_character()['CustomName']
