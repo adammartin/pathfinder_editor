@@ -58,3 +58,18 @@ def test_update_knowledge_world():
     final_world = STATS['Intelligence']['m_Dependents'][1]['m_BaseValue']
     assert skills_info.knowledge_world() == str(world)
     assert skills_info.knowledge_world() == str(final_world)
+
+
+def test_lore_nature():
+    nature = str(STATS['SaveWill']['BaseStat']['m_Dependents'][2]['m_BaseValue'])
+    skills_info = SkillsInfo(STATS)
+    assert skills_info.lore_nature() == str(nature)
+
+
+def test_update_lore_nature():
+    skills_info = SkillsInfo(STATS)
+    nature = str(int(skills_info.lore_nature()) + 6)
+    skills_info.update_lore_nature(nature)
+    final_nature = STATS['SaveWill']['BaseStat']['m_Dependents'][2]['m_BaseValue']
+    assert skills_info.lore_nature() == str(nature)
+    assert skills_info.lore_nature() == str(final_nature)
