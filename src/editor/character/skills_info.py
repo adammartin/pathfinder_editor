@@ -9,6 +9,18 @@ class SkillsInfo():
     def update_athletics(self, value):
         return self._update_skill_value("SkillAthletics", value)
 
+    def knowledge_arcana(self):
+        return self._load_skill_value("SkillKnowledgeArcana")
+
+    def update_knowledge_arcana(self, value):
+        return self._update_skill_value("SkillKnowledgeArcana", value)
+
+    def knowledge_world(self):
+        return self._load_skill_value("SkillKnowledgeWorld")
+
+    def update_knowledge_world(self, value):
+        return self._update_skill_value("SkillKnowledgeWorld", value)
+
     def _load_skill_value(self, skill_name):
         skill = self.stat_block[skill_name]
         if "m_BaseValue" in skill:
@@ -21,7 +33,7 @@ class SkillsInfo():
             if "m_BaseValue" in skill:
                 skill["m_BaseValue"] = int(value)
             else:
-                _update_skill_ref(skill["$ref"], stats, value)
+                self._update_skill_ref(skill["$ref"], value)
 
     def _load_skill_ref(self, ref):
         for struct in self.stat_block.values():
@@ -33,7 +45,7 @@ class SkillsInfo():
                 return value
         return "Unknown"
 
-    def _update_skill_ref(self, ref, svalue):
+    def _update_skill_ref(self, ref, value):
         for struct in self.stat_block.values():
             result = _update_direct_dependent_skills_ref(ref, struct, value)
             if not result and "BaseStat" in struct:
