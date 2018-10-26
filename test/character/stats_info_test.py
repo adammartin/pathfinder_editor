@@ -33,3 +33,20 @@ def test_update_dexterity():
     stat_info.update_dexterity(new_dexterity)
     assert stat_info.dexterity() == str(new_dexterity)
     assert stat_info.dexterity() == str(stats['Dexterity']['m_BaseValue'])
+
+
+def test_constitution():
+    stats = pytest.helpers.main_stat_block()
+    constitution = str(stats['Constitution']['m_BaseValue'])
+    stat_info = StatInfo(stats)
+    assert stat_info.constitution() == str(constitution)
+
+
+def test_update_constitution():
+    stats = pytest.helpers.main_stat_block()
+    strength = str(stats['Constitution']['m_BaseValue'])
+    stat_info = StatInfo(stats)
+    new_constitution = str(int(stat_info.constitution()) + 6)
+    stat_info.update_constitution(new_constitution)
+    assert stat_info.constitution() == str(new_constitution)
+    assert stat_info.constitution() == str(stats['Constitution']['m_BaseValue'])
