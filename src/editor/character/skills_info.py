@@ -27,6 +27,12 @@ class SkillsInfo():
     def update_lore_nature(self, value):
         return self._update_skill_value("SkillLoreNature", value)
 
+    def lore_religion(self):
+        return self._load_skill_value("SkillLoreReligion")
+
+    def update_lore_religion(self, value):
+        return self._update_skill_value("SkillLoreReligion", value)
+
     def _load_skill_value(self, skill_name):
         skill = self.stat_block[skill_name]
         if "m_BaseValue" in skill:

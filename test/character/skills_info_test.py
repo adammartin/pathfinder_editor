@@ -73,3 +73,18 @@ def test_update_lore_nature():
     final_nature = STATS['SaveWill']['BaseStat']['m_Dependents'][2]['m_BaseValue']
     assert skills_info.lore_nature() == str(nature)
     assert skills_info.lore_nature() == str(final_nature)
+
+
+def test_lore_religion():
+    religion = str(STATS['SaveWill']['BaseStat']['m_Dependents'][3]['m_BaseValue'])
+    skills_info = SkillsInfo(STATS)
+    assert skills_info.lore_religion() == str(religion)
+
+
+def test_update_lore_religion():
+    skills_info = SkillsInfo(STATS)
+    religion = str(int(skills_info.lore_religion()) + 6)
+    skills_info.update_lore_religion(religion)
+    final_religion = STATS['SaveWill']['BaseStat']['m_Dependents'][3]['m_BaseValue']
+    assert skills_info.lore_nature() == str(religion)
+    assert skills_info.lore_nature() == str(final_religion)
