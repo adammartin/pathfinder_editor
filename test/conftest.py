@@ -15,6 +15,13 @@ def player_base(money, id):
 
 
 @pytest.helpers.register
+def header():
+    return {
+        'Name': 'Quicksave3'
+    }
+
+
+@pytest.helpers.register
 def main_stat_block():
     return {
         '$id': '6544',
