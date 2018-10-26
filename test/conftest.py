@@ -169,30 +169,34 @@ def main_stat_block():
 
 
 @pytest.helpers.register
+def main_alignment(x_axis=0, y_axis=0):
+    return {
+        'Vector': {
+            'x': x_axis,
+            'y': y_axis
+        },
+        'm_History': [
+            {
+                'Position': {
+                    'x': -0.713193357,
+                    'y': 0.7009674
+                }
+            },
+            {
+                'Position': {
+                    'x': -0.6990331,
+                    'y': 0.715089262
+                }
+            }
+        ]
+    }
+
+@pytest.helpers.register
 def main_character(character_id, companion):
     return {
         '$id': '99',
         'Descriptor': {
-            'Alignment': {
-                'Vector': {
-                    'x': 0,
-                    'y': 0
-                },
-                'm_History': [
-                    {
-                        'Position': {
-                            'x': -0.713193357,
-                            'y': 0.7009674
-                        }
-                    },
-                    {
-                        'Position': {
-                            'x': -0.6990331,
-                            'y': 0.715089262
-                        }
-                    }
-                ]
-            },
+            'Alignment': main_alignment(),
             'CustomName': 'Main Character',
             'Progression': {
                 'Experience': 1234

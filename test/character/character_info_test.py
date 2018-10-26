@@ -3,6 +3,7 @@ from unittest import mock
 from unittest.mock import patch, MagicMock
 from editor.character.character_info import CharacterInfo
 from editor.character import stat_info
+from editor.character import alignment_info
 
 
 MAIN_CHAR_ID = '1'
@@ -16,11 +17,14 @@ MAIN_KEY = {
 def main_character(party):
     return party['m_EntityData'][0]
 
+
 def alignment_data(character):
     return character['Descriptor']['Alignment']
 
+
 def stats_data(character):
     return character['Descriptor']['Stats']
+
 
 def test_name():
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
@@ -28,27 +32,17 @@ def test_name():
     assert character.name() == main_character(party)['Descriptor']['CustomName']
 
 
-def test_alignment():
-    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
-    character = CharacterInfo(party, MAIN_KEY)
-    assert character.alignment() == 'Neutral'
-
-
-def test_update_alignment():
-    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
-    character = CharacterInfo(party, MAIN_KEY)
-    new_alignment = 'Neutral Good'
-    character.update_alignment(new_alignment)
-    assert character.alignment() == new_alignment
-    assert alignment_data(main_character(party))['Vector']['x'] == 0
-    assert alignment_data(main_character(party))['Vector']['y'] == 1
-    assert alignment_data(main_character(party))['m_History'][-1]['Position']['x'] == 0
-    assert alignment_data(main_character(party))['m_History'][-1]['Position']['y'] == 1
-
-
 @patch('editor.character.stat_info.StatInfo')
-def test_stats(mock_stat_info):
+def test_stats_info(mock_stat_info):
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     character = CharacterInfo(party, MAIN_KEY)
-    mock_stat_info.assert_called_with(main_character(party)['Descriptor']['Stats'])
-    assert character.stats == mock_stat_info.return_value
+    mock_stat_info.assert_called_with(stats_data(main_character(party)))
+    assert character.stats_info == mock_stat_info.return_value
+
+
+@patch('editor.character.alignment_info.AlignmentInfo')
+def test_alignment_info(mock_alignment_info):
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CharacterInfo(party, MAIN_KEY)
+    mock_alignment_info.assert_called_with(alignment_data(main_character(party)))
+    assert character.align_info == mock_alignment_info.return_value

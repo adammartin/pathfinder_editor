@@ -1,22 +1,4 @@
-import math
-from editor.character import stat_info
-
-
-ALIGNMENTS = {
-    'Neutral': {'x': 0, 'y': 0, 'angle_min': 0, 'angle_max': 0, 'radius': 0.4},
-    'Chaotic Good': {'x': 0.707106769, 'y': 0.707106769,
-                     'angle_min': 0, 'angle_max': 45},
-    'Neutral Good': {'x': 0, 'y': 1, 'angle_min': 45, 'angle_max': 90},
-    'Lawful Good': {'x': -0.707106769, 'y': 0.707106769,
-                    'angle_min': 90, 'angle_max': 135},
-    'Lawful Neutral': {'x': -1, 'y': 0, 'angle_min': 135, 'angle_max': 180},
-    'Lawful Evil': {'x': -0.707106769, 'y': -0.707106769,
-                    'angle_min': 180, 'angle_max': 225},
-    'Neutral Evil': {'x': 0, 'y': -1, 'angle_min': 225, 'angle_max': 270},
-    'Chaotic Evil': {'x': 0.707106769, 'y': -0.707106769,
-                     'angle_min': 270, 'angle_max': 315},
-    'Chaotic Neutral': {'x': 1, 'y': 0, 'angle_min': 315, 'angle_max': 360},
-}
+from editor.character import stat_info, alignment_info
 
 
 class CharacterInfo():
@@ -24,23 +6,11 @@ class CharacterInfo():
     def __init__(self, party_data, key):
         self._party_data = party_data
         self._key = key
-        self.stats = stat_info.StatInfo(self._main_character_stats())
+        self.stats_info = stat_info.StatInfo(self._main_character_stats())
+        self.align_info = alignment_info.AlignmentInfo(self._alignment_block())
 
     def name(self):
         return self._main_character()['CustomName']
-
-    def alignment(self):
-        descriptor = self._main_character()
-        x_axis = descriptor['Alignment']['Vector']['x']
-        y_axis = descriptor['Alignment']['Vector']['y']
-        return _calculate_alignment(x_axis, y_axis)
-
-    def update_alignment(self, value):
-        if value != self.alignment():
-            vector = ALIGNMENTS[value]
-            descriptor = self._main_character()
-            descriptor['Alignment']['Vector'] = vector
-            descriptor['Alignment']['m_History'][-1]['Position'] = vector
 
     def _main_character(self):
         for entity in self._party_data['m_EntityData']:
@@ -50,6 +20,9 @@ class CharacterInfo():
 
     def _main_character_stats(self):
         return _search_for_stats(self._main_character())
+
+    def _alignment_block(self):
+        return self._main_character()['Alignment']
 
 
 def _has_unique_id(entity, unique_id):
@@ -110,22 +83,3 @@ def _recursive_search(child, ref):
 
 def _id_matches(entity, ref):
     return entity is not None and '$id' in entity and entity['$id'] == ref
-
-
-def _calculate_angle(x_axis, y_axis):
-    # CCW Angle starting east
-    angle = (math.atan2(y_axis, x_axis) * 180 / math.pi) - 22.5
-    if angle < 0:
-        angle += 360
-    return angle
-
-
-def _calculate_alignment(x_axis, y_axis):
-    angle = _calculate_angle(x_axis, y_axis)
-    radius = math.sqrt(x_axis * x_axis + y_axis * y_axis)
-    for align, data in ALIGNMENTS.items():
-        if 'radius' in data and radius <= data['radius']:
-            return align
-        elif angle >= data['angle_min'] and angle < data['angle_max']:
-            return align
-    return 'UNKOWN'
