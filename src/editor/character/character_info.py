@@ -1,4 +1,4 @@
-from editor.character import stat_info, alignment_info
+from editor.character import stat_info, alignment_info, skills_info
 
 
 class CharacterInfo():
@@ -8,6 +8,7 @@ class CharacterInfo():
         self._key = key
         self.stats_info = stat_info.StatInfo(self._main_character_stats())
         self.align_info = alignment_info.AlignmentInfo(self._alignment_block())
+        self.skills_info = skills_info.SkillsInfo(self._main_character_stats())
 
     def name(self):
         return self._main_character()['CustomName']

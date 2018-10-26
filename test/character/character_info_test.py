@@ -2,8 +2,7 @@ import pytest
 from unittest import mock
 from unittest.mock import patch
 from editor.character.character_info import CharacterInfo
-from editor.character import stat_info
-from editor.character import alignment_info
+from editor.character import stat_info, alignment_info, skills_info
 
 
 MAIN_CHAR_ID = '1'
@@ -46,3 +45,11 @@ def test_alignment_info(mock_alignment_info):
     character = CharacterInfo(party, MAIN_KEY)
     mock_alignment_info.assert_called_with(alignment_data(main_character(party)))
     assert character.align_info == mock_alignment_info.return_value
+
+
+@patch('editor.character.skills_info.SkillsInfo')
+def test_skills_info(mock_skills_info):
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CharacterInfo(party, MAIN_KEY)
+    mock_skills_info.assert_called_with(stats_data(main_character(party)))
+    assert character.skills_info == mock_skills_info.return_value
