@@ -1,6 +1,6 @@
 import pytest
 from unittest import mock
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from editor.character.character_info import CharacterInfo
 from editor.character import stat_info
 from editor.character import alignment_info
