@@ -32,6 +32,12 @@ class StatInfo():
     def update_wisdom(self, value):
         self._update_attribute_value('Wisdom', value)
 
+    def charisma(self):
+        return self._load_attribute_value('Charisma')
+
+    def update_charisma(self, value):
+        self._update_attribute_value('Charisma', value)
+
     def _load_attribute_value(self, attribute_name):
         attribute = self._stat_block[attribute_name]
         if 'm_BaseValue' in attribute:

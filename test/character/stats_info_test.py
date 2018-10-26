@@ -79,3 +79,19 @@ def test_update_wisdom():
     stat_info.update_wisdom(new_wisdom)
     assert stat_info.wisdom() == str(new_wisdom)
     assert stat_info.wisdom() == str(stats['SaveWill']['BaseStat']['m_BaseValue'])
+
+
+def test_charisma():
+    stats = pytest.helpers.main_stat_block()
+    charisma = str(stats['Charisma']['m_BaseValue'])
+    stat_info = StatInfo(stats)
+    assert stat_info.charisma() == str(charisma)
+
+
+def test_update_charisma():
+    stats = pytest.helpers.main_stat_block()
+    stat_info = StatInfo(stats)
+    new_charisma = str(int(stat_info.charisma()) + 6)
+    stat_info.update_charisma(new_charisma)
+    assert stat_info.charisma() == str(new_charisma)
+    assert stat_info.charisma() == str(stats['Charisma']['m_BaseValue'])
