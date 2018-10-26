@@ -22,8 +22,8 @@ ALIGNMENTS = {
 class CharacterInfo():
     # pylint: disable=too-few-public-methods
     def __init__(self, party_data, key):
-        self.party_data = party_data
-        self.key = key
+        self._party_data = party_data
+        self._key = key
         self.stats = stat_info.StatInfo(self._main_character_stats())
 
     def name(self):
@@ -35,12 +35,6 @@ class CharacterInfo():
         y_axis = descriptor['Alignment']['Vector']['y']
         return _calculate_alignment(x_axis, y_axis)
 
-    def strength(self):
-        return self.stats.strength()
-
-    def dexterity(self):
-        return self.stats.dexterity()
-
     def update_alignment(self, value):
         if value != self.alignment():
             vector = ALIGNMENTS[value]
@@ -48,15 +42,9 @@ class CharacterInfo():
             descriptor['Alignment']['Vector'] = vector
             descriptor['Alignment']['m_History'][-1]['Position'] = vector
 
-    def update_strength(self, value):
-        self.stats.update_strength(value)
-
-    def update_dexterity(self, value):
-        self.stats.update_dexterity(value)
-
     def _main_character(self):
-        for entity in self.party_data['m_EntityData']:
-            if _has_unique_id(entity, self.key['m_UniqueId']):
+        for entity in self._party_data['m_EntityData']:
+            if _has_unique_id(entity, self._key['m_UniqueId']):
                 return _search_for_player(entity)
         return None
 

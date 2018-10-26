@@ -47,36 +47,8 @@ def test_update_alignment():
 
 
 @patch('editor.character.stat_info.StatInfo')
-def test_strength(mock_stat_info):
-    strength = '50'
-    mock_stat_info.return_value.strength.return_value = strength
+def test_stats(mock_stat_info):
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     character = CharacterInfo(party, MAIN_KEY)
-    assert character.strength() == strength
-
-
-@patch('editor.character.stat_info.StatInfo')
-def test_update_strength(mock_stat_info):
-    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
-    character = CharacterInfo(party, MAIN_KEY)
-    new_strength = '1000'
-    character.update_strength(new_strength)
-    mock_stat_info.return_value.update_strength.assert_called_with(new_strength)
-
-
-@patch('editor.character.stat_info.StatInfo')
-def test_dexterity(mock_stat_info):
-    dexterity = '29'
-    mock_stat_info.return_value.dexterity.return_value = dexterity
-    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
-    character = CharacterInfo(party, MAIN_KEY)
-    assert character.dexterity() == dexterity
-
-
-@patch('editor.character.stat_info.StatInfo')
-def test_update_dexterity(mock_stat_info):
-    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
-    character = CharacterInfo(party, MAIN_KEY)
-    new_dexterity = '247'
-    character.update_dexterity(new_dexterity)
-    mock_stat_info.return_value.update_dexterity.assert_called_with(new_dexterity)
+    mock_stat_info.assert_called_with(main_character(party)['Descriptor']['Stats'])
+    assert character.stats == mock_stat_info.return_value
