@@ -33,6 +33,42 @@ class SkillsInfo():
     def update_lore_religion(self, value):
         return self._update_skill_value("SkillLoreReligion", value)
 
+    def mobility(self):
+        return self._load_skill_value("SkillMobility")
+
+    def update_mobility(self, value):
+        return self._update_skill_value("SkillMobility", value)
+
+    def perception(self):
+        return self._load_skill_value("SkillPerception")
+
+    def update_perception(self, value):
+        return self._update_skill_value("SkillPerception", value)
+
+    def persuasion(self):
+        return self._load_skill_value("SkillPersuasion")
+
+    def update_persuasion(self, value):
+        return self._update_skill_value("SkillPersuasion", value)
+
+    def stealth(self):
+        return self._load_skill_value("SkillStealth")
+
+    def update_stealth(self, value):
+        return self._update_skill_value("SkillStealth", value)
+
+    def theivery(self):
+        return self._load_skill_value("SkillThievery")
+
+    def update_theivery(self, value):
+        return self._update_skill_value("SkillThievery", value)
+
+    def use_magic_device(self):
+        return self._load_skill_value("SkillUseMagicDevice")
+
+    def update_use_magic_device(self, value):
+        return self._update_skill_value("SkillUseMagicDevice", value)
+
     def _load_skill_value(self, skill_name):
         skill = self.stat_block[skill_name]
         if "m_BaseValue" in skill:
