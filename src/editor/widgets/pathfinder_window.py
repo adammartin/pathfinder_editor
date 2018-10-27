@@ -1,8 +1,9 @@
 from pathlib import Path
 from tkinter import Frame, filedialog, Menu
-from editor.character.file_utils import extract_file, save_game_file, clean_temp_storage
+from editor.character.file_utils import extract_file
+from editor.character.file_utils import save_game_file
+from editor.character.file_utils import clean_temp_storage
 from editor.widgets.tabs import Tabs
-from editor.widgets.name_frame import NameFrame
 
 
 class PathfinderTkWindow(Frame):

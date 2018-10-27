@@ -50,7 +50,9 @@ class StatInfo():
             if 'm_BaseValue' in attribute:
                 attribute['m_BaseValue'] = int(value)
             else:
-                _update_attribute_ref(attribute['$ref'], self._stat_block, value)
+                _update_attribute_ref(attribute['$ref'],
+                                      self._stat_block,
+                                      value)
 
 
 def _load_attribute_ref(ref, stats):

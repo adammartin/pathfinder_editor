@@ -1,12 +1,11 @@
-from editor.character.entity_info import EntityInfo
-from editor.character.file_utils import save_json
-
-
-class KingdomInfo(EntityInfo):
+class KingdomInfo():
     # pylint: disable=too-many-public-methods
+    def __init__(self, main_block):
+        self.main_block = main_block
+
     def has_kingdom_data(self):
-        data = self._data()
-        return 'Kingdom' in data and _kingdom(data) is not None
+        data = self.main_block
+        return 'Kingdom' in data and self._kingdom() is not None
 
     def build_points(self):
         return self._load_attribute_value('BP')
@@ -82,43 +81,32 @@ class KingdomInfo(EntityInfo):
 
     def _load_stat_value(self, stat):
         if self.has_kingdom_data():
-            stats = _kingdom_stats(_kingdom(self._data()))
-            stat_block = _load_stat_block(stats, stat)
+            stat_block = self._load_stat_block(stat)
             return str(stat_block['Value'])
         return 'No Kingdom'
 
     def _load_attribute_value(self, attribute):
         if self.has_kingdom_data():
-            return str(_kingdom(self._data())[attribute])
+            return str(self._kingdom()[attribute])
         return 'No Kingdom'
 
     def _update_attribute(self, attribute, value):
-        data = self._data()
-        if self.has_kingdom_data() and _kingdom(data)[attribute] != value:
-            _kingdom(data)[attribute] = value
-            self._save(data)
+        if self.has_kingdom_data() and self._kingdom()[attribute] != value:
+            self._kingdom()[attribute] = value
 
     def _update_stat(self, stat, value):
-        data = self._data()
         if self.has_kingdom_data() and self._load_stat_value(stat) != value:
-            stats = _kingdom_stats(_kingdom(data))
-            _load_stat_block(stats, stat)['Value'] = int(value)
-            self._save(data)
+            self._load_stat_block(stat)['Value'] = int(value)
+
+    def _kingdom(self):
+        return self.main_block['Kingdom']
 
     def _data(self):
-        return self._json(self._player_json_name)
+        return self.main_block
 
-    def _save(self, data):
-        save_json(self._temp_path, self._player_json_name, data)
+    def _kingdom_stats(self):
+        return self._kingdom()['Stats']['m_Stats']
 
-
-def _kingdom(data):
-    return data['Kingdom']
-
-
-def _kingdom_stats(kingdom):
-    return kingdom['Stats']['m_Stats']
-
-
-def _load_stat_block(stats, stat):
-    return next(block for block in stats if block['Type'] == stat)
+    def _load_stat_block(self, stat):
+        stats = self._kingdom_stats()
+        return next(block for block in stats if block['Type'] == stat)

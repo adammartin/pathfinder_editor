@@ -1,21 +1,23 @@
 from editor.character import file_utils
 from editor.character.character_info import CharacterInfo
+from editor.character.kingdom_info import KingdomInfo
 
 
 class PartyInfo:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, path):
         self._temp_path = path
         self._party_json_name = 'party.json'
         self._player_json_name = 'player.json'
         self._header_json_name = 'header.json'
         self._party = file_utils.load_json(path, self._party_json_name)
-        self._main =  file_utils.load_json(path, self._player_json_name)
+        self._main = file_utils.load_json(path, self._player_json_name)
         self.main_character = CharacterInfo(self._party,
                                             self._main['m_MainCharacter'])
+        self.kingdom = KingdomInfo(self._main)
 
     def money(self):
         return str(self._main['Money'])
-
 
     def update_money(self, money):
         if self._main['Money'] != int(money):

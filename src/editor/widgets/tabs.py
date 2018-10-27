@@ -1,4 +1,4 @@
-from tkinter import ttk, Label, StringVar, Entry, OptionMenu, Button
+from tkinter import ttk, Label, StringVar, Entry, OptionMenu
 from tkinter import BOTH, W, EW
 from editor.character.alignment_info import ALIGNMENTS
 from editor.character.kingdom_info import KingdomInfo
@@ -23,12 +23,13 @@ class Tabs():
         self._name_panel.load_info(self._party.main_character)
         self._player_tab.load_info(self._party)
         self._skill_tab.load_info(self._party)
-        self._kingdom_tab.load_info(path)
+        self._kingdom_tab.load_info(self._party)
 
     def update_info(self, path):
-        self._player_tab.update_info()
-        self._skill_tab.update_info()
-        self._kingdom_tab.update_info(path)
+        self._player_tab.update_info(self._party)
+        self._skill_tab.update_info(self._party)
+        self._kingdom_tab.update_info(self._party)
+        self._party.save()
 
 
 class Tab():
@@ -140,18 +141,18 @@ class SkillInfoTab(Tab):
         self._use_magic_device_field.set(character.skills.use_magic_device())
 
     def update_info(self, party):
-        character = party.main_character
-        character.skills.update_athletics(self._athletics_field.get())
-        character.skills.update_knowledge_arcana(self._arcana_field.get())
-        character.skills.update_knowledge_world(self._knowledge_world_field.get())
-        character.skills.update_mobility(self._mobility_field.get())
-        character.skills.update_lore_nature(self._lore_nature_field.get())
-        character.skills.update_lore_religion(self._lore_religion_field.get())
-        character.skills.update_perception(self._perception_field.get())
-        character.skills.update_persuasion(self._persuasion_field.get())
-        character.skills.update_stealth(self._stealth_field.get())
-        character.skills.update_theivery(self._theivery_field.get())
-        character.skills.update_use_magic_device(self._use_magic_device_field.get())
+        skills = party.main_character.skills
+        skills.update_athletics(self._athletics_field.get())
+        skills.update_knowledge_arcana(self._arcana_field.get())
+        skills.update_knowledge_world(self._knowledge_world_field.get())
+        skills.update_mobility(self._mobility_field.get())
+        skills.update_lore_nature(self._lore_nature_field.get())
+        skills.update_lore_religion(self._lore_religion_field.get())
+        skills.update_perception(self._perception_field.get())
+        skills.update_persuasion(self._persuasion_field.get())
+        skills.update_stealth(self._stealth_field.get())
+        skills.update_theivery(self._theivery_field.get())
+        skills.update_use_magic_device(self._use_magic_device_field.get())
 
 
 class KingdomInfoTab(Tab):
@@ -172,8 +173,8 @@ class KingdomInfoTab(Tab):
         self._culture_field = self._add_field(5, 0, 'Culture:')
         self._espionage_field = self._add_field(5, 1, 'Espionage:')
 
-    def load_info(self, path):
-        kingdom_info = KingdomInfo(path)
+    def load_info(self, party):
+        kingdom_info = party.kingdom
         if kingdom_info.has_kingdom_data():
             self._kingdom_name_field.set(kingdom_info.kingdom_name())
             self._build_points_field.set(kingdom_info.build_points())
@@ -188,8 +189,8 @@ class KingdomInfoTab(Tab):
             self._culture_field.set(kingdom_info.culture())
             self._espionage_field.set(kingdom_info.espionage())
 
-    def update_info(self, path):
-        kingdom_info = KingdomInfo(path)
+    def update_info(self, party):
+        kingdom_info = party.kingdom
         if kingdom_info.has_kingdom_data():
             kingdom_info.update_kingdom_name(self._kingdom_name_field.get())
             kingdom_info.update_build_points(self._build_points_field.get())

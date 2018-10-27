@@ -97,8 +97,9 @@ class SkillsInfo():
         for struct in self.stat_block.values():
             result = _update_direct_dependent_skills_ref(ref, struct, value)
             if not result and "BaseStat" in struct:
+                base_stats = struct["BaseStat"]
                 result = _update_direct_dependent_skills_ref(ref,
-                                                             struct["BaseStat"],
+                                                             base_stats,
                                                              value)
             if result:
                 break

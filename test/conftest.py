@@ -5,8 +5,81 @@ import pytest
 
 
 @pytest.helpers.register
+def kingdom():
+    return {
+        'BP': 11500,
+        'KingdomName': 'Blargh',
+        'Stats': {
+            '$id': '1919',
+            'm_Stats': [
+                {
+                    '$id': '1920',
+                    'Rank': 1,
+                    'Type': 'Community',
+                    'Value': 30
+                },
+                {
+                    '$id': '1921',
+                    'Rank': 2,
+                    'Type': 'Loyalty',
+                    'Value': 28
+                },
+                {
+                    '$id': '1922',
+                    'Rank': 1,
+                    'Type': 'Military',
+                    'Value': 25
+                },
+                {
+                    '$id': '1923',
+                    'Rank': 1,
+                    'Type': 'Economy',
+                    'Value': 21
+                },
+                {
+                    '$id': '1924',
+                    'Rank': 0,
+                    'Type': 'Relations',
+                    'Value': 4
+                },
+                {
+                    '$id': '1925',
+                    'Rank': 1,
+                    'Type': 'Divine',
+                    'Value': 10
+                },
+                {
+                    '$id': '1926',
+                    'Rank': 0,
+                    'Type': 'Arcane',
+                    'Value': 3
+                },
+                {
+                    '$id': '1927',
+                    'Rank': 0,
+                    'Type': 'Stability',
+                    'Value': 10
+                },
+                {
+                    '$id': '1928',
+                    'Rank': 0,
+                    'Type': 'Culture',
+                    'Value': 5
+                },
+                {
+                    '$id': '1929',
+                    'Rank': 0,
+                    'Type': 'Espionage',
+                    'Value': 0
+                }
+            ]
+        }
+    }
+
+@pytest.helpers.register
 def player_base(money, id):
     return {
+        'Kingdom': kingdom(),
         'Money': money,
         'm_MainCharacter': {
             'm_UniqueId': id

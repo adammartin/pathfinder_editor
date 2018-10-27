@@ -75,6 +75,13 @@ def test_main_character(load_json_mock):
     assert party_info.main_character.name() == character_name
 
 
+@patch('editor.character.file_utils.load_json')
+def test_skills_info(load_json_mock):
+    load_json_mock.side_effect = fake_loader
+    party_info = PartyInfo(PATH)
+    assert party_info.kingdom.has_kingdom_data()
+
+
 @patch('editor.character.file_utils.save_json')
 @patch('editor.character.file_utils.load_json')
 def test_save_edits_header_name(load_json_mock, save_json_mock):
