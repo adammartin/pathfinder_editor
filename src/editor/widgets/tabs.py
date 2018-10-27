@@ -97,7 +97,7 @@ class PlayerInfoTab(Tab):
 
     def update_info(self, party):
         character = party.main_character
-        character.stats.update_money(self._money.get())
+        party.update_money(self._money.get())
         character.update_experience(self._experience.get())
         character.alignment.update_alignment(self._alignment.get())
         character.stats.update_strength(self._strength.get())
