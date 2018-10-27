@@ -11,24 +11,17 @@ class Tabs():
     def __init__(self, parent):
         self._parent = parent
         self._party = None
-        self._name_panel = NameFrame(parent)
         self._notebook = ttk.Notebook(parent, style='Default.TNotebook')
-        self._player_tab = PlayerInfoTab(self._notebook)
-        self._skill_tab = SkillInfoTab(self._notebook)
-        self._kingdom_tab = KingdomInfoTab(self._notebook)
-        self._notebook.pack(expand=1, fill=BOTH)
+        self._main = CharacterTab(self._notebook, parent)
 
     def load_info(self, path):
         self._party = PartyInfo(self._parent.temp_path)
-        self._name_panel.load_info(self._party.main_character)
-        self._player_tab.load_info(self._party)
-        self._skill_tab.load_info(self._party)
-        self._kingdom_tab.load_info(self._party)
+        self._main.load_info(self._party)
+        self._notebook.pack(expand=1, fill=BOTH)
+        self._parent.config()
 
     def update_info(self, path):
-        self._player_tab.update_info(self._party)
-        self._skill_tab.update_info(self._party)
-        self._kingdom_tab.update_info(self._party)
+        self._main.update_info(self._party)
         self._party.save()
 
 
@@ -36,7 +29,7 @@ class Tab():
     # pylint: disable=too-few-public-methods
     def __init__(self, notebook):
         self._panel = ttk.Frame(notebook, style='Default.TFrame')
-        self._party = None
+        self._notebook = notebook
 
     def _add_large_label(self, a_row, colspan, label_text):
         label = Label(self._panel, text=label_text, borderwidth=1, fg='red')
@@ -66,11 +59,35 @@ class Tab():
         return label
 
 
+class CharacterTab(Tab):
+    def __init__(self, notebook, parent):
+        super(CharacterTab, self).__init__(notebook)
+        self._parent = parent
+        self._char_book = ttk.Notebook(self._panel, style='Default.TNotebook')
+        self._player_tab = PlayerInfoTab(self._char_book)
+        self._skill_tab = SkillInfoTab(self._char_book)
+        self._kingdom_tab = KingdomInfoTab(self._char_book)
+
+    def load_info(self, party):
+        self._notebook.add(self._panel, text=party.main_character.name())
+        self._player_tab.load_info(party)
+        self._skill_tab.load_info(party)
+        self._kingdom_tab.load_info(party)
+        self._notebook.pack(expand=1, fill=BOTH)
+        self._char_book.pack(expand=1, fill=BOTH)
+        self._panel.config()
+        self._parent.config()
+
+    def update_info(self, path):
+        self._player_tab.update_info(party)
+        self._skill_tab.update_info(party)
+        self._kingdom_tab.update_info(party)
+
+
 class PlayerInfoTab(Tab):
     # pylint: disable=too-many-instance-attributes
     def __init__(self, notebook):
         super(PlayerInfoTab, self).__init__(notebook)
-        notebook.add(self._panel, text="Player")
         self._money = self._add_field(0, 0, 'Money:')
         self._experience = self._add_field(0, 1, 'Experience:')
         self._alignment = self._add_dropdown(1, 0, 'Alignment:',
@@ -81,7 +98,6 @@ class PlayerInfoTab(Tab):
         self._intelligence = self._add_field(3, 1, 'Intelligence:')
         self._wisdom = self._add_field(4, 0, 'Wisdom:')
         self._charisma = self._add_field(4, 1, 'Charisma:')
-        self._panel.config()
 
     def load_info(self, party):
         self._money.set(party.money())
@@ -94,6 +110,8 @@ class PlayerInfoTab(Tab):
         self._intelligence.set(character.stats.intelligence())
         self._wisdom.set(character.stats.wisdom())
         self._charisma.set(character.stats.charisma())
+        self._notebook.add(self._panel, text="Player")
+        self._panel.config()
 
     def update_info(self, party):
         character = party.main_character
@@ -112,7 +130,6 @@ class SkillInfoTab(Tab):
     # pylint: disable=too-many-instance-attributes
     def __init__(self, notebook):
         super(SkillInfoTab, self).__init__(notebook)
-        notebook.add(self._panel, text="Skills")
         self._athletics_field = self._add_field(0, 0, 'Athletics:')
         self._mobility_field = self._add_field(0, 1, 'Mobility:')
         self._arcana_field = self._add_field(1, 0, 'Knowledge Arcana:')
@@ -139,6 +156,8 @@ class SkillInfoTab(Tab):
         self._stealth_field.set(character.skills.stealth())
         self._theivery_field.set(character.skills.theivery())
         self._use_magic_device_field.set(character.skills.use_magic_device())
+        self._notebook.add(self._panel, text="Skills")
+        self._panel.config()
 
     def update_info(self, party):
         skills = party.main_character.skills
@@ -159,7 +178,6 @@ class KingdomInfoTab(Tab):
     # pylint: disable=too-many-instance-attributes
     def __init__(self, notebook):
         super(KingdomInfoTab, self).__init__(notebook)
-        notebook.add(self._panel, text="Kingdom")
         self._kingdom_name_field = self._add_field(0, 0, 'Kingdom Name:')
         self._build_points_field = self._add_field(0, 1, 'Build Points:')
         self._community_field = self._add_field(1, 0, 'Community:')
@@ -188,6 +206,8 @@ class KingdomInfoTab(Tab):
             self._stability_field.set(kingdom_info.stability())
             self._culture_field.set(kingdom_info.culture())
             self._espionage_field.set(kingdom_info.espionage())
+            self._notebook.add(self._panel, text="Kingdom")
+            self._panel.config()
 
     def update_info(self, party):
         kingdom_info = party.kingdom

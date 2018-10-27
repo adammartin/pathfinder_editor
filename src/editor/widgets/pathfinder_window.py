@@ -14,6 +14,7 @@ class PathfinderTkWindow(Frame):
         self._tabs = Tabs(self)
         self._create_menu_bar()
         clean_temp_storage(self.temp_path)
+        master.minsize(700, 300)
         self.pack()
 
     def _create_menu_bar(self):
@@ -53,3 +54,4 @@ class PathfinderTkWindow(Frame):
         self.master.filename = filedialog.askopenfilename(title="Select file")
         extract_file(Path(self.master.filename), self.temp_path)
         self._tabs.load_info(self.temp_path)
+        self.pack()
