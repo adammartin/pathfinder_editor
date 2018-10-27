@@ -1,5 +1,4 @@
 from tkinter import ttk, StringVar, Label, LEFT, E, W, BOTH
-from editor.character.player_info import PlayerInfo
 from editor.widgets.defaults import DEFAULT_BACKGROUND
 
 
@@ -18,6 +17,5 @@ class NameFrame(ttk.Frame):
         self._player_name_field.pack(expand=1, side=LEFT, anchor=W)
         self.pack(expand=1, fill=BOTH)
 
-    def load_info(self, path):
-        player_info = PlayerInfo(path)
-        self._player_name.set(player_info.name())
+    def load_info(self, character):
+        self._player_name.set(character.name())

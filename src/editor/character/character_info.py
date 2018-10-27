@@ -6,12 +6,19 @@ class CharacterInfo():
     def __init__(self, party_data, key):
         self._party_data = party_data
         self._key = key
-        self.stats_info = stat_info.StatInfo(self._main_character_stats())
-        self.align_info = alignment_info.AlignmentInfo(self._alignment_block())
-        self.skills_info = skills_info.SkillsInfo(self._main_character_stats())
+        self.stats = stat_info.StatInfo(self._main_character_stats())
+        self.alignment = alignment_info.AlignmentInfo(self._alignment_block())
+        self.skills = skills_info.SkillsInfo(self._main_character_stats())
 
     def name(self):
         return self._main_character()['CustomName']
+
+    def experience(self):
+        return str(self._main_character()['Progression']['Experience'])
+
+    def update_experience(self, value):
+        if int(self.experience()) != int(value):
+            self._main_character()['Progression']['Experience'] = int(value)
 
     def _main_character(self):
         for entity in self._party_data['m_EntityData']:
@@ -39,7 +46,7 @@ def _search_for_player(entity):
 
 
 def _search_for_caster(entity, ref):
-    if caster_ref_matches(entity['m_AutoUseAbility'], ref):
+    if _caster_ref_matches(entity['m_AutoUseAbility'], ref):
         return entity['m_AutoUseAbility']['Caster']
     return None
 
