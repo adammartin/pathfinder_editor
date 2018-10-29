@@ -13,6 +13,7 @@ MAIN_KEY = {
     'm_UniqueId': MAIN_CHAR_ID
 }
 
+
 def main_character(party):
     return party['m_EntityData'][0]
 
