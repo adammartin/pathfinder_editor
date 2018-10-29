@@ -18,8 +18,7 @@ class SkillInfoTab(Tab):
         self._use_magic_device_field = self._add_field(5, 0,
                                                        'Use Magic Device:')
 
-    def load_info(self, party):
-        character = party.main_character
+    def load_info(self, character):
         self._athletics_field.set(character.skills.athletics())
         self._arcana_field.set(character.skills.knowledge_arcana())
         self._knowledge_world_field .set(character.skills.knowledge_world())
@@ -34,8 +33,7 @@ class SkillInfoTab(Tab):
         self._notebook.add(self._panel, text="Skills")
         self._panel.config()
 
-    def update_info(self, party):
-        skills = party.main_character.skills
+    def update_info(self, character):
         skills.update_athletics(self._athletics_field.get())
         skills.update_knowledge_arcana(self._arcana_field.get())
         skills.update_knowledge_world(self._knowledge_world_field.get())

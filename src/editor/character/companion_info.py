@@ -27,6 +27,8 @@ class CompanionInfo():
         self.skills = skills_info.SkillsInfo(self._companion_stats())
 
     def name(self):
+        if self._companion()['CustomName']:
+            return self._companion()['CustomName']
         c_id = self._companion()['Blueprint']
         val = next((info for info in BLUEPRINTS if info['blueprint'] == c_id))
         return val['name']

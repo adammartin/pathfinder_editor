@@ -15,7 +15,7 @@ class CharacterTab(Tab):
     def load_info(self, party):
         self._notebook.add(self._panel, text=party.main_character.name())
         self._player_tab.load_info(party)
-        self._skill_tab.load_info(party)
+        self._skill_tab.load_info(party.main_character)
         self._notebook.pack(expand=1, fill=BOTH)
         self._char_book.pack(expand=1, fill=BOTH)
         self._panel.config()
@@ -23,4 +23,4 @@ class CharacterTab(Tab):
 
     def update_info(self, party):
         self._player_tab.update_info(party)
-        self._skill_tab.update_info(party)
+        self._skill_tab.update_info(party.main_character)

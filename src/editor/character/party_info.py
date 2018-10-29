@@ -1,19 +1,23 @@
 from editor.character import file_utils
 from editor.character.character_info import CharacterInfo
+from editor.character.companion_info import CompanionInfo
 from editor.character.kingdom_info import KingdomInfo
+
+
+PARTY_JSON_NAME = 'party.json'
+PLAYER_JSON_NAME = 'player.json'
+HEADER_JSON_NAME = 'header.json'
 
 
 class PartyInfo:
     # pylint: disable=too-many-instance-attributes
     def __init__(self, path):
         self._temp_path = path
-        self._party_json_name = 'party.json'
-        self._player_json_name = 'player.json'
-        self._header_json_name = 'header.json'
-        self._party = file_utils.load_json(path, self._party_json_name)
-        self._main = file_utils.load_json(path, self._player_json_name)
+        self._party = file_utils.load_json(path, PARTY_JSON_NAME)
+        self._main = file_utils.load_json(path, PLAYER_JSON_NAME)
         self.main_character = CharacterInfo(self._party,
                                             self._main['m_MainCharacter'])
+        self.companions = _load_companions(self._party)
         self.kingdom = KingdomInfo(self._main)
 
     def money(self):
@@ -24,14 +28,23 @@ class PartyInfo:
             self._main['Money'] = int(money)
 
     def save(self):
-        header = file_utils.load_json(self._temp_path, self._header_json_name)
+        header = file_utils.load_json(self._temp_path, HEADER_JSON_NAME)
         header['Name'] = 'Edited - ' + header['Name']
         file_utils.save_json(self._temp_path,
-                             self._player_json_name,
+                             PLAYER_JSON_NAME,
                              self._main)
         file_utils.save_json(self._temp_path,
-                             self._party_json_name,
+                             PARTY_JSON_NAME,
                              self._party)
         file_utils.save_json(self._temp_path,
-                             self._header_json_name,
+                             HEADER_JSON_NAME,
                              header)
+
+def _load_companions(party):
+    companions = []
+    for entity in party['m_EntityData']:
+        if '$ref' in entity:
+            companion = CompanionInfo(party, entity)
+            if companion.name():
+                companions.append(companion)
+    return companions

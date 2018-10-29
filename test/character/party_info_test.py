@@ -4,6 +4,7 @@ from unittest.mock import patch, call
 from editor.character.party_info import PartyInfo
 from editor.character.file_utils import load_json
 from editor.character.character_info import CharacterInfo
+from editor.character.companion_info import CompanionInfo, BLUEPRINTS
 
 
 PARTY_JSON = 'party.json'
@@ -42,6 +43,16 @@ def main_character(party):
     return party['m_EntityData'][0]
 
 
+def companion(party):
+    # dirty shortcut to get testing rolling
+    return party['m_EntityData'][0]['Descriptor']['m_Inventory']['m_Items'][0]['Wielder']
+
+
+def companion_expected_name(blueprint_id):
+    comp_info = (comp_info for comp_info in BLUEPRINTS if comp_info['blueprint'] == blueprint_id)
+    return next(comp_info)['name']
+
+
 @pytest.yield_fixture(autouse=True)
 def run_around_tests():
     reset_data()
@@ -76,7 +87,16 @@ def test_main_character(load_json_mock):
 
 
 @patch('editor.character.file_utils.load_json')
-def test_skills_info(load_json_mock):
+def test_companions(load_json_mock):
+    load_json_mock.side_effect = fake_loader
+    character_name = companion_expected_name(COMPANION_ID)
+    party_info = PartyInfo(PATH)
+    assert isinstance(party_info.companions[0], CompanionInfo)
+    assert party_info.companions[0].name() == character_name
+
+
+@patch('editor.character.file_utils.load_json')
+def test_kingdom_info(load_json_mock):
     load_json_mock.side_effect = fake_loader
     party_info = PartyInfo(PATH)
     assert party_info.kingdom.has_kingdom_data()
