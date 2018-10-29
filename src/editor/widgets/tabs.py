@@ -13,14 +13,17 @@ class Tabs():
         self._party = None
         self._notebook = ttk.Notebook(parent, style='Default.TNotebook')
         self._main = CharacterTab(self._notebook, parent)
+        self._kingdom_tab = KingdomInfoTab(self._notebook)
 
     def load_info(self, path):
         self._party = PartyInfo(self._parent.temp_path)
         self._main.load_info(self._party)
+        self._kingdom_tab.load_info(self._party)
         self._notebook.pack(expand=1, fill=BOTH)
         self._parent.config()
 
     def update_info(self, path):
+        self._main.update_info(self._party)
         self._main.update_info(self._party)
         self._party.save()
 
@@ -66,13 +69,11 @@ class CharacterTab(Tab):
         self._char_book = ttk.Notebook(self._panel, style='Default.TNotebook')
         self._player_tab = PlayerInfoTab(self._char_book)
         self._skill_tab = SkillInfoTab(self._char_book)
-        self._kingdom_tab = KingdomInfoTab(self._char_book)
 
     def load_info(self, party):
         self._notebook.add(self._panel, text=party.main_character.name())
         self._player_tab.load_info(party)
         self._skill_tab.load_info(party)
-        self._kingdom_tab.load_info(party)
         self._notebook.pack(expand=1, fill=BOTH)
         self._char_book.pack(expand=1, fill=BOTH)
         self._panel.config()
@@ -81,7 +82,6 @@ class CharacterTab(Tab):
     def update_info(self, path):
         self._player_tab.update_info(party)
         self._skill_tab.update_info(party)
-        self._kingdom_tab.update_info(party)
 
 
 class PlayerInfoTab(Tab):
