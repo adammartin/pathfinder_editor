@@ -3,7 +3,7 @@ from tkinter import Frame, filedialog, Menu
 from editor.character.file_utils import extract_file
 from editor.character.file_utils import save_game_file
 from editor.character.file_utils import clean_temp_storage
-from editor.widgets.tabs import Tabs
+from editor.widgets.tabs.tabs import Tabs
 
 
 class PathfinderTkWindow(Frame):
@@ -45,7 +45,7 @@ class PathfinderTkWindow(Frame):
 
     def _save_and_destroy(self, event=None):
         # pylint: disable=unused-argument
-        self._tabs.update_info(self.temp_path)
+        self._tabs.update_info()
         save_game_file(self.master.filename, self.temp_path)
         self.master.quit()
 
@@ -53,5 +53,5 @@ class PathfinderTkWindow(Frame):
         # pylint: disable=unused-argument
         self.master.filename = filedialog.askopenfilename(title="Select file")
         extract_file(Path(self.master.filename), self.temp_path)
-        self._tabs.load_info(self.temp_path)
+        self._tabs.load_info()
         self.pack()
