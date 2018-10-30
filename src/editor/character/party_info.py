@@ -40,6 +40,7 @@ class PartyInfo:
                              HEADER_JSON_NAME,
                              header)
 
+
 def _load_companions(party):
     companions = []
     for entity in party['m_EntityData']:

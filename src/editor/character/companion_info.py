@@ -1,4 +1,6 @@
 from editor.character import stat_info, alignment_info, skills_info
+from editor.character.search_algorithms import id_matches, search_recursively
+
 
 BLUEPRINTS = [
     {'blueprint': '77c11edb92ce0fd408ad96b40fd27121', 'name': 'Linzi'},
@@ -45,40 +47,17 @@ class CompanionInfo():
         if '$id' in stats:
             return stats
         ref = stats['$ref']
-        return _search_recursively(self._party_data, ref, _id_matches)
+        return search_recursively(self._party_data, ref, id_matches)
 
     def _companion(self):
-        return _search_recursively(self._party_data, self._key, _key_matches)
+        return search_recursively(self._party_data, self._key, _key_matches)
 
     def _alignment_block(self):
         return self._companion()['Alignment']
 
 
-def _search_recursively(data, key, match_logic):
-    if match_logic(data, key):
-        return data
-    if isinstance(data, list):
-        for node in data:
-            result = _search_recursively(node, key, match_logic)
-            if match_logic(result, key):
-                return result
-    elif isinstance(data, dict):
-        for node in data.values():
-            result = _search_recursively(node, key, match_logic)
-            if match_logic(result, key):
-                return result
-    return None
-
-
 def _key_matches(data, key):
     try:
         return 'Unit' in data and data['Unit'] == key
-    except TypeError:
-        return False
-
-
-def _id_matches(data, ref):
-    try:
-        return '$id' in data and data['$id'] == ref
     except TypeError:
         return False
