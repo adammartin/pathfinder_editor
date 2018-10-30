@@ -4,7 +4,8 @@ from unittest.mock import patch, call
 from editor.character.party_info import PartyInfo
 from editor.character.file_utils import load_json
 from editor.character.character_info import CharacterInfo
-from editor.character.companion_info import CompanionInfo, BLUEPRINTS
+from editor.character.companion_info import CompanionInfo
+from editor.character.entity_info import BLUEPRINTS
 
 
 PARTY_JSON = 'party.json'

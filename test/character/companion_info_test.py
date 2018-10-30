@@ -1,7 +1,8 @@
 import pytest
 from unittest import mock
 from unittest.mock import patch
-from editor.character.companion_info import CompanionInfo, BLUEPRINTS
+from editor.character.companion_info import CompanionInfo
+from editor.character.entity_info import BLUEPRINTS
 
 
 MAIN_CHAR_ID = '1'
