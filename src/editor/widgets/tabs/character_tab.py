@@ -1,14 +1,13 @@
-from tkinter import ttk, BOTH
+from tkinter import ttk, BOTH, W, EW
+from tkinter import Label, StringVar, OptionMenu
 from editor.widgets.tabs.tab import Tab
 from editor.widgets.tabs.skill_tab import SkillInfoTab
 from editor.widgets.tabs.player_info_tab import PlayerInfoTab
-
-from tkinter import ttk, Label, StringVar, Entry, OptionMenu
-from tkinter import W, EW
 from editor.widgets.defaults import DEFAULT_BACKGROUND
 
 
 class CharacterTab(Tab):
+    # pylint: disable=too-few-public-methods
     def __init__(self, notebook, parent):
         super(CharacterTab, self).__init__(notebook)
         self._parent = parent
@@ -23,13 +22,9 @@ class CharacterTab(Tab):
 
     def load_info(self, party):
         self._char_sel = self._add_char_dropdown(0, 0, 'Character:',
-                                                list(party.members.keys()))
-        selected = self._char_sel.get()
+                                                 list(party.members.keys()))
         self._party = party
         self._update_character_tab()
-
-    def update_info(self, party):
-        pass
 
     def _expand(self):
         self._sel_panel.pack(expand=1, fill=BOTH)
@@ -40,6 +35,7 @@ class CharacterTab(Tab):
         self._parent.config()
 
     def _update_character_tab(self, *args):
+        # pylint: disable=unused-argument
         party = self._party
         selected = self._char_sel.get()
         self._character_tab.load_info(party, party.members[selected])

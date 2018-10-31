@@ -1,7 +1,6 @@
 from tkinter import ttk, BOTH
 from editor.character.party_info import PartyInfo
 from editor.widgets.tabs.character_tab import CharacterTab
-from editor.widgets.tabs.companion_tab import CompanionTab
 from editor.widgets.tabs.kingdom_info_tab import KingdomInfoTab
 
 
@@ -19,7 +18,6 @@ class Tabs():
         self._main.load_info(self._party)
         self._kingdom_tab.load_info(self._party)
         self._expand()
-
 
     def update_info(self):
         self._party.save()

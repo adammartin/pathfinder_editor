@@ -3,27 +3,20 @@ from editor.character.alignment_info import ALIGNMENTS
 
 
 class PlayerInfoTab(Tab):
-    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes, too-few-public-methods
     def __init__(self, notebook):
         super(PlayerInfoTab, self).__init__(notebook)
-        self._money = self._add_field(0, 0, 'Money:', self._update_info)
-        self._experience = self._add_field(0, 1, 'Experience:',
-                                           self._update_info)
+        func = self._update_info
+        self._money = self._add_field(0, 0, 'Money:', func)
+        self._experience = self._add_field(0, 1, 'Experience:', func)
         self._alignment = self._add_dropdown(1, 0, 'Alignment:',
-                                             ALIGNMENTS.keys(),
-                                             self._update_info)
-        self._strength = self._add_field(2, 0, 'Strength:',
-                                         self._update_info)
-        self._dexterity = self._add_field(2, 1, 'Dexterity:',
-                                          self._update_info)
-        self._constitution = self._add_field(3, 0, 'Constitution:',
-                                             self._update_info)
-        self._intelligence = self._add_field(3, 1, 'Intelligence:',
-                                             self._update_info)
-        self._wisdom = self._add_field(4, 0, 'Wisdom:',
-                                       self._update_info)
-        self._charisma = self._add_field(4, 1, 'Charisma:',
-                                         self._update_info)
+                                             ALIGNMENTS.keys(), func)
+        self._strength = self._add_field(2, 0, 'Strength:', func)
+        self._dexterity = self._add_field(2, 1, 'Dexterity:', func)
+        self._constitution = self._add_field(3, 0, 'Constitution:', func)
+        self._intelligence = self._add_field(3, 1, 'Intelligence:', func)
+        self._wisdom = self._add_field(4, 0, 'Wisdom:', func)
+        self._charisma = self._add_field(4, 1, 'Charisma:', func)
         self._character = None
         self._party = None
         self._expand()
@@ -44,6 +37,7 @@ class PlayerInfoTab(Tab):
         self._dirty_lock = False
 
     def _update_info(self, *args):
+        # pylint: disable=unused-argument
         alignment = self._character.alignment
         stats = self._character.stats
         self._update(self._money, self._party.update_money)

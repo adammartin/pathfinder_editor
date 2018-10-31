@@ -2,21 +2,22 @@ from editor.widgets.tabs.tab import Tab
 
 
 class KingdomInfoTab(Tab):
-    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-instance-attributes, too-few-public-methods
     def __init__(self, notebook):
         super(KingdomInfoTab, self).__init__(notebook)
-        self._kingdom_name = self._add_field(0, 0, 'Kingdom Name:', self._update_info)
-        self._build_points = self._add_field(0, 1, 'Build Points:', self._update_info)
-        self._community = self._add_field(1, 0, 'Community:', self._update_info)
-        self._loyalty = self._add_field(1, 1, 'Loyalty:', self._update_info)
-        self._military = self._add_field(2, 0, 'Military:', self._update_info)
-        self._economy = self._add_field(2, 1, 'Economy:', self._update_info)
-        self._relations = self._add_field(3, 0, 'Relations:', self._update_info)
-        self._divine = self._add_field(3, 1, 'Divine', self._update_info)
-        self._arcane = self._add_field(4, 0, 'Arcane', self._update_info)
-        self._stability = self._add_field(4, 1, 'Stability:', self._update_info)
-        self._culture = self._add_field(5, 0, 'Culture:', self._update_info)
-        self._espionage = self._add_field(5, 1, 'Espionage:', self._update_info)
+        func = self._update_info
+        self._kingdom_name = self._add_field(0, 0, 'Kingdom Name:', func)
+        self._build_points = self._add_field(0, 1, 'Build Points:', func)
+        self._community = self._add_field(1, 0, 'Community:', func)
+        self._loyalty = self._add_field(1, 1, 'Loyalty:', func)
+        self._military = self._add_field(2, 0, 'Military:', func)
+        self._economy = self._add_field(2, 1, 'Economy:', func)
+        self._relations = self._add_field(3, 0, 'Relations:', func)
+        self._divine = self._add_field(3, 1, 'Divine', func)
+        self._arcane = self._add_field(4, 0, 'Arcane', func)
+        self._stability = self._add_field(4, 1, 'Stability:', func)
+        self._culture = self._add_field(5, 0, 'Culture:', func)
+        self._espionage = self._add_field(5, 1, 'Espionage:', func)
         self._kingdom_info = None
 
     def load_info(self, party):
@@ -41,6 +42,7 @@ class KingdomInfoTab(Tab):
             self._panel.config()
 
     def _update_info(self, *args):
+        # pylint: disable=unused-argument
         kingdom_info = self._kingdom_info
         self._update(self._kingdom_name, kingdom_info.update_kingdom_name)
         self._update(self._build_points, kingdom_info.update_build_points)

@@ -25,6 +25,7 @@ class Tab():
         return variable
 
     def _add_dropdown(self, a_row, a_col, label, choices, function):
+        # pylint: disable=too-many-arguments
         col = a_col*2
         self._add_label(a_row, col, label)
         variable = StringVar()
