@@ -15,9 +15,9 @@ class PartyInfo:
         self._temp_path = path
         self._party = file_utils.load_json(path, PARTY_JSON_NAME)
         self._main = file_utils.load_json(path, PLAYER_JSON_NAME)
-        self.main_character = CharacterInfo(self._party,
-                                            self._main['m_MainCharacter'])
-        self.companions = _load_companions(self._party)
+        self.members = {}
+        self._add(CharacterInfo(self._party, self._main['m_MainCharacter']))
+        self._load_companions()
         self.kingdom = KingdomInfo(self._main)
 
     def money(self):
@@ -40,12 +40,12 @@ class PartyInfo:
                              HEADER_JSON_NAME,
                              header)
 
+    def _add(self, character):
+        self.members[character.name()] = character
 
-def _load_companions(party):
-    companions = []
-    for entity in party['m_EntityData']:
-        if '$ref' in entity:
-            companion = CompanionInfo(party, entity)
-            if companion.name():
-                companions.append(companion)
-    return companions
+    def _load_companions(self):
+        for entity in self._party['m_EntityData']:
+            if '$ref' in entity:
+                companion = CompanionInfo(self._party, entity)
+                if companion.name():
+                    self._add(companion)

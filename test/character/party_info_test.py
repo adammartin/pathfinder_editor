@@ -83,8 +83,9 @@ def test_main_character(load_json_mock):
     load_json_mock.side_effect = fake_loader
     character_name = main_character(PARTY)['Descriptor']['CustomName']
     party_info = PartyInfo(PATH)
-    assert isinstance(party_info.main_character, CharacterInfo)
-    assert party_info.main_character.name() == character_name
+    character = party_info.members[character_name]
+    assert isinstance(character, CharacterInfo)
+    assert character.name() == character_name
 
 
 @patch('editor.character.file_utils.load_json')
@@ -92,8 +93,9 @@ def test_companions(load_json_mock):
     load_json_mock.side_effect = fake_loader
     character_name = companion_expected_name(COMPANION_ID)
     party_info = PartyInfo(PATH)
-    assert isinstance(party_info.companions[0], CompanionInfo)
-    assert party_info.companions[0].name() == character_name
+    character = party_info.members[character_name]
+    assert isinstance(character, CompanionInfo)
+    assert character.name() == character_name
 
 
 @patch('editor.character.file_utils.load_json')
