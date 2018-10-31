@@ -46,6 +46,8 @@ class PartyInfo:
     def _load_companions(self):
         for entity in self._party['m_EntityData']:
             if '$ref' in entity:
-                companion = CompanionInfo(self._party, entity)
-                if companion.name():
+                try:
+                    companion = CompanionInfo(self._party, entity)
                     self._add(companion)
+                except TypeError:
+                    pass
