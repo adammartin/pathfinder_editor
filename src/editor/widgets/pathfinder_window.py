@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from tkinter import Frame, filedialog, Menu
 from editor.character.file_utils import extract_file
@@ -10,7 +11,8 @@ class PathfinderTkWindow(Frame):
     # pylint: disable=too-many-ancestors
     def __init__(self, master):
         Frame.__init__(self, master)
-        self.temp_path = Path('./tempdir/')
+        path = os.getcwd() + os.sep + 'tempdir' + os.sep
+        self.temp_path = Path(path)
         self._tabs = Tabs(self)
         self._create_menu_bar()
         clean_temp_storage(self.temp_path)
