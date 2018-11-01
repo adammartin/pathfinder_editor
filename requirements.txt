@@ -1,3 +1,6 @@
+# build tools
+PyInstaller==3.4
+
 # static analysis
 autopep8==1.2.4
 bandit==1.4.0
@@ -5,7 +8,6 @@ flake8==3.0.4
 pep8-naming==0.4.1
 pycodestyle==2.0.0
 pylint==1.9.1
-nuitka==0.6.0.3
 
 # testing
 coverage==4.0.1
