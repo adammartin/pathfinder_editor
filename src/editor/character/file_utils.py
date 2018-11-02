@@ -16,7 +16,7 @@ def save_game_file(file_name, temp_path):
 def extract_file(path, temp_dir_path):
     if path.is_file():
         with ZipFile(str(path.resolve()), 'r') as save_zip:
-            save_zip.extractall(path=str(temp_dir_path.resolve()))
+            save_zip.extractall(path=str(temp_dir_path))
 
 
 def load_json(dir_path, file_name):
@@ -31,13 +31,13 @@ def save_json(dir_path, file_name, contents):
         json.dump(contents, json_file)
 
 
-def full_path(dir_path, file_name):
-    return str((dir_path / file_name).resolve())
-
-
 def persist_as_zip(save_root, save_file, directory_path):
     zip_path = full_path(save_root, save_file)
-    _zipdir(directory_path, zip_path)
+    _zipdir(str(directory_path), zip_path)
+
+
+def full_path(dir_path, file_name):
+    return str(dir_path / file_name)
 
 
 def _zipdir(dir_path, zip_file_path):
@@ -64,4 +64,4 @@ def _zipdir(dir_path, zip_file_path):
 
 def clean_temp_storage(path):
     if path.exists():
-        rmtree(path)
+        rmtree(str(path.resolve()))
