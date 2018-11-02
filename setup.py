@@ -17,6 +17,6 @@ setup(
     package_dir={'': 'src'},
     entry_points='''
             [console_scripts]
-            pathfinder_editor=pathfinder_editor.pathfinder_editor:pathfinder_editor
+            pathfinder_editor=editor.pathfinder_editor:pathfinder_editor
     '''
 )
