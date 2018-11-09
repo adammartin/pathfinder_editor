@@ -282,6 +282,13 @@ def main_character(character_id, companion, companion2=None):
                 'Experience': 1234
             },
             'Stats': main_stat_block(),
+            'UISettings': {
+                '$id': '3950',
+                'm_CustomPortrait': {
+                    '$id': '3993',
+                    'm_CustomPortraitId': 'Sorcerer_Dark'
+                },
+            },
             'm_Inventory': {
                 'm_Items': [
                     {
@@ -486,6 +493,10 @@ def companion(unit_id, comp_blueprint_id):
             'Wisdom': {
                 '$ref': '125'
             }
+        },
+        'UISettings': {
+            '$id': '',
+            'm_CustomPortrait': None
         },
         'Unit': {
             '$ref': unit_id
