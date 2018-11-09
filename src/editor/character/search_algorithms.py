@@ -19,3 +19,23 @@ def id_matches(data, ref):
         return '$id' in data and data['$id'] == ref
     except TypeError:
         return False
+
+
+def next_id(data):
+    return _max_id(data)+1
+
+
+def _max_id(data):
+    max_id = 0
+    try:
+        if '$id' in data:
+            max_id = max(int(data['$id']), max_id)
+        if isinstance(data, list):
+            for item in data:
+                max_id = max(_max_id(item), max_id)
+        elif isinstance(data, dict):
+            for node in data.values():
+                max_id = max(_max_id(node), max_id)
+    except TypeError:
+        return max_id
+    return max_id

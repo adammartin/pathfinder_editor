@@ -495,7 +495,7 @@ def companion(unit_id, comp_blueprint_id):
             }
         },
         'UISettings': {
-            '$id': '',
+            '$id': '498',
             'm_CustomPortrait': None
         },
         'Unit': {

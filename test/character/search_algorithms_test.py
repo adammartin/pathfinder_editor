@@ -1,5 +1,5 @@
 import pytest
-from editor.character.search_algorithms import id_matches, search_recursively
+from editor.character.search_algorithms import id_matches, search_recursively, next_id
 
 
 def test_id_matches_exact():
@@ -73,3 +73,43 @@ def test_deeply_nested_match():
     data = {'blah': ['blarg', None, {'foo': ['jar', {'blob': expected_node}]}]}
     result = search_recursively(data, expected_key, example_algorithm)
     assert result == expected_node
+
+
+def test_next_id_one_value_one_level():
+    highest = 1
+    data = {'$id': str(highest) }
+    assert next_id(data) == highest+1
+
+
+def test_next_id_one_value_one_level_larger():
+    highest = 2
+    data = {'$id': str(highest) }
+    assert next_id(data) == highest+1
+
+
+def test_next_id_multiple_one_level():
+    highest = 5
+    data = []
+    for i in range(highest):
+        data.append({'$id': str(i+1)})
+    assert next_id(data) == highest+1
+
+def test_next_id_with_none():
+    highest = 5
+    data = []
+    for i in range(highest):
+        data.append({'$id': str(i+1)})
+    data.append(None)
+    assert next_id(data) == highest+1
+
+def test_next_with_multiple_levels():
+    count = 5
+    data = []
+    for i in range(count):
+        data.append({'$id': str(i+1), 'child': {'$id': str(i+count+1)}})
+    assert next_id(data) == (2*count)+1
+
+
+def test_with_full_party_data():
+    party = pytest.helpers.party_base(1, 2, 3)
+    assert next_id(party) == 6600
