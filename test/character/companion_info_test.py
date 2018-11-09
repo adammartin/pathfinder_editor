@@ -3,6 +3,7 @@ from unittest import mock
 from unittest.mock import patch
 from editor.character.companion_info import CompanionInfo
 from editor.character.entity_info import BLUEPRINTS
+from editor.character.search_algorithms import next_id
 
 
 MAIN_CHAR_ID = '1'
@@ -48,6 +49,31 @@ def test_name():
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     character = CompanionInfo(party, COMPANION_KEY)
     assert character.name() == companion_expected_name(COMPANION_ID)
+
+
+def test_companion_custom_portrait():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CompanionInfo(party, COMPANION_KEY)
+    assert character.portrait() == None
+
+
+def test_companion_custom_portrait():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CompanionInfo(party, COMPANION_KEY)
+    new_portrait = 'blarg'
+    assert character.portrait() != new_portrait
+    character.update_portrait(new_portrait)
+    assert character.portrait() == new_portrait
+    assert new_portrait == companion(party)['UISettings']['m_CustomPortrait']['m_CustomPortraitId']
+
+
+def test_companion_custom_portrait_id():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    expected_id = next_id(party)
+    character = CompanionInfo(party, COMPANION_KEY)
+    character.update_portrait('blarg')
+    assert companion(party)['UISettings']['m_CustomPortrait']['$id'] == str(expected_id)
+    assert next_id(party) == expected_id+1
 
 
 def test_cust_comp_name_pre_stag_lord_defeated():

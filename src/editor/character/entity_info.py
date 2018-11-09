@@ -1,5 +1,7 @@
 from editor.character import stat_info, alignment_info, skills_info
-from editor.character.search_algorithms import id_matches, search_recursively
+from editor.character.search_algorithms import id_matches
+from editor.character.search_algorithms import search_recursively
+from editor.character.search_algorithms import next_id
 
 
 BLUEPRINTS = [
@@ -44,6 +46,23 @@ class EntityInfo():
     def update_experience(self, value):
         if int(self.experience()) != int(value):
             self._character['Progression']['Experience'] = int(value)
+
+    def portrait(self):
+        portrait = self._character['UISettings']['m_CustomPortrait']
+        try:
+            return portrait['m_CustomPortraitId']
+        except TypeError:
+            return None
+
+    def update_portrait(self, new_portrait):
+        portrait = self._character['UISettings']['m_CustomPortrait']
+        try:
+            portrait['m_CustomPortraitId'] = new_portrait
+        except TypeError:
+            self._character['UISettings']['m_CustomPortrait'] = {
+                '$id': str(next_id(self._party_data)),
+                'm_CustomPortraitId': new_portrait
+            }
 
     def _alignment_block(self):
         return self._character['Alignment']

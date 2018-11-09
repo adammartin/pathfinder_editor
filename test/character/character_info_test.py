@@ -32,6 +32,22 @@ def test_name():
     assert character.name() == main_character(party)['Descriptor']['CustomName']
 
 
+def test_portrait():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CharacterInfo(party, MAIN_KEY)
+    assert character.portrait() == main_character(party)['Descriptor']['UISettings']['m_CustomPortrait']['m_CustomPortraitId']
+
+
+def test_update_portrait():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+    character = CharacterInfo(party, MAIN_KEY)
+    new_portrait = 'blarg'
+    assert character.portrait() != new_portrait
+    character.update_portrait(new_portrait)
+    assert character.portrait() == new_portrait
+    assert new_portrait == main_character(party)['Descriptor']['UISettings']['m_CustomPortrait']['m_CustomPortraitId']
+
+
 def test_experience():
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     progression = main_character(party)['Descriptor']['Progression']
