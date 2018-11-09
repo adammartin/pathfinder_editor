@@ -1,5 +1,6 @@
 from editor.widgets.tabs.tab import Tab
 from editor.character.alignment_info import ALIGNMENTS
+from editor.character.file_utils import list_portrait_dirs
 
 
 class PlayerInfoTab(Tab):
@@ -11,7 +12,7 @@ class PlayerInfoTab(Tab):
         self._experience = self._add_field(0, 1, 'Experience:', func)
         self._alignment = self._add_dropdown(1, 0, 'Alignment:',
                                              ALIGNMENTS.keys(), func)
-        self._portrait = self._add_field(1, 1, 'Portrait', func)
+        self._portrait = None
         self._strength = self._add_field(2, 0, 'Strength:', func)
         self._dexterity = self._add_field(2, 1, 'Dexterity:', func)
         self._constitution = self._add_field(3, 0, 'Constitution:', func)
@@ -22,7 +23,10 @@ class PlayerInfoTab(Tab):
         self._party = None
         self._expand()
 
-    def load_info(self, party, character):
+    def load_info(self, party, character, save_dir):
+        portraits = list_portrait_dirs(save_dir)
+        self._portrait = self._add_dropdown(1, 1, 'Portrait',
+                                            portraits, self._update_info)
         self._character = character
         self._party = party
         self._dirty_lock = True

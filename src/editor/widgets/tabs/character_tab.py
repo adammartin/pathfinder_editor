@@ -7,7 +7,7 @@ from editor.widgets.defaults import DEFAULT_BACKGROUND
 
 
 class CharacterTab(Tab):
-    # pylint: disable=too-few-public-methods
+    # pylint: disable=too-few-public-methods, too-many-instance-attributes
     def __init__(self, notebook, parent):
         super(CharacterTab, self).__init__(notebook)
         self._parent = parent
@@ -18,12 +18,14 @@ class CharacterTab(Tab):
         self._skill_tab = SkillInfoTab(self._char_book)
         self._notebook.add(self._panel, text="Character Info")
         self._party = None
+        self._save_dir = None
         self._expand()
 
-    def load_info(self, party):
+    def load_info(self, party, save_dir):
         self._char_sel = self._add_char_dropdown(0, 0, 'Character:',
                                                  list(party.members.keys()))
         self._party = party
+        self._save_dir = save_dir
         self._update_character_tab()
 
     def _expand(self):
@@ -38,7 +40,9 @@ class CharacterTab(Tab):
         # pylint: disable=unused-argument
         party = self._party
         selected = self._char_sel.get()
-        self._character_tab.load_info(party, party.members[selected])
+        self._character_tab.load_info(party,
+                                      party.members[selected],
+                                      self._save_dir)
         self._skill_tab.load_info(party.members[selected])
 
     def _add_char_dropdown(self, a_row, a_col, text, choices):

@@ -52,6 +52,7 @@ class PathfinderTkWindow(Frame):
     def _file_open(self, event=None):
         # pylint: disable=unused-argument
         self.master.filename = filedialog.askopenfilename(title="Select file")
-        extract_file(Path(self.master.filename), self.temp_path)
-        self._tabs.load_info()
+        file = Path(self.master.filename)
+        extract_file(file, self.temp_path)
+        self._tabs.load_info(file.parent)
         self.pack()

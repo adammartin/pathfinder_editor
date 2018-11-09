@@ -13,9 +13,9 @@ class Tabs():
         self._kingdom_tab = KingdomInfoTab(self._notebook)
         self._expand()
 
-    def load_info(self):
+    def load_info(self, save_dir):
         self._party = PartyInfo(self._parent.temp_path)
-        self._main.load_info(self._party)
+        self._main.load_info(self._party, save_dir)
         self._kingdom_tab.load_info(self._party)
         self._expand()
 

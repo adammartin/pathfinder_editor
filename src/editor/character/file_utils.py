@@ -7,6 +7,11 @@ import os
 import time
 
 
+def list_portrait_dirs(save_file_dir):
+    portrait_path = save_file_dir.parent / 'Portraits'
+    return sorted(next(os.walk(portrait_path))[1])
+
+
 def save_game_file(file_name, temp_path):
     save_root = Path(file_name).parent
     save_file = str(int(round(time.time() * 1000))) + ".zks"
