@@ -11,6 +11,7 @@ class PlayerInfoTab(Tab):
         self._experience = self._add_field(0, 1, 'Experience:', func)
         self._alignment = self._add_dropdown(1, 0, 'Alignment:',
                                              ALIGNMENTS.keys(), func)
+        self._portrait = self._add_field(1, 1, 'Portrait', func)
         self._strength = self._add_field(2, 0, 'Strength:', func)
         self._dexterity = self._add_field(2, 1, 'Dexterity:', func)
         self._constitution = self._add_field(3, 0, 'Constitution:', func)
@@ -34,6 +35,7 @@ class PlayerInfoTab(Tab):
         self._intelligence.set(character.stats.intelligence())
         self._wisdom.set(character.stats.wisdom())
         self._charisma.set(character.stats.charisma())
+        self._portrait.set(character.portrait())
         self._dirty_lock = False
 
     def _update_info(self, *args):
@@ -49,6 +51,7 @@ class PlayerInfoTab(Tab):
         self._update(self._intelligence, stats.update_intelligence)
         self._update(self._wisdom, stats.update_wisdom)
         self._update(self._charisma, stats.update_charisma)
+        self._update(self._portrait, self._character.update_portrait)
 
     def _expand(self):
         self._notebook.add(self._panel, text="Player")

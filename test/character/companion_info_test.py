@@ -51,13 +51,13 @@ def test_name():
     assert character.name() == companion_expected_name(COMPANION_ID)
 
 
-def test_companion_custom_portrait():
+def test_companion_portrait():
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     character = CompanionInfo(party, COMPANION_KEY)
     assert character.portrait() == None
 
 
-def test_companion_custom_portrait():
+def test_companion_update_portrait():
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     character = CompanionInfo(party, COMPANION_KEY)
     new_portrait = 'blarg'
@@ -67,7 +67,7 @@ def test_companion_custom_portrait():
     assert new_portrait == companion(party)['UISettings']['m_CustomPortrait']['m_CustomPortraitId']
 
 
-def test_companion_custom_portrait_id():
+def test_companion_update_portrait_id():
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     expected_id = next_id(party)
     character = CompanionInfo(party, COMPANION_KEY)
