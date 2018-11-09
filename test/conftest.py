@@ -272,7 +272,7 @@ def main_alignment(x_axis=0, y_axis=0):
     }
 
 @pytest.helpers.register
-def main_character(character_id, companion):
+def main_character(character_id, companion, companion2=None):
     return {
         '$id': '99',
         'Descriptor': {
@@ -287,6 +287,31 @@ def main_character(character_id, companion):
                     {
                         '$id': '19',
                         'Wielder': companion
+                    },
+                    {
+                        '$id': '3203',
+                        'ArmorComponent': {
+                            '$id': '3204',
+                            'm_Enchantments': {
+                                '$id': '3210',
+                                'Owner': {
+                                    '$ref': '3204'
+                                },
+                                'm_Facts': [
+                                    {
+                                        '$id': '3211',
+                                        'm_CurrentContext': {
+                                            '$id': '3212',
+                                            'AssociatedBlueprint': 'e90c252e08035294eba39bafce76c119',
+                                            'm_CasterReference': {
+                                                'm_UniqueId': '0813922c-8863-4ce8-afea-6781d861e93f'
+                                            },
+                                            'm_OwnerDescriptor': companion2
+                                        }
+                                    }
+                                ]
+                            }
+                        }
                     }
                 ]
             }
@@ -468,12 +493,135 @@ def companion(unit_id, comp_blueprint_id):
     }
 
 
+
+
 @pytest.helpers.register
-def party_base(main_char_id, comp_unit_id, comp_blue_print_id):
+def custom_companion(unit_id):
+    return {
+        '$id': '3213',
+        'Alignment': {
+            '$id': '3637',
+            'Vector': {
+                'x': -4.371139e-08,
+                'y': 1.0
+            },
+            'm_History': [
+                {
+                    '$id': '3638',
+                    'Position': {
+                        'x': 0.0,
+                        'y': 0.0
+                    }
+                },
+                {
+                    '$id': '3639',
+                    'Position': {
+                        'x': -4.371139e-08,
+                        'y': 1.0
+                    }
+                }
+            ],
+            'm_Owner': {
+                '$ref': '3213'
+            }
+        },
+        'Blueprint': 'baaff53a675a84f4983f1e2113b24552',
+        'CustomName': 'Elizabeth',
+        'Progression': {
+            '$id': '3439',
+            'Experience': 2000,
+            'Owner': {
+                '$ref': '3213'
+            }
+        },
+        'Stats': {
+            '$ref': '3254'
+        },
+        'UISettings': {
+            '$id': '3579',
+            'm_CustomPortrait': {
+                '$id': '3580',
+                'm_CustomPortraitId': '840'
+            }
+        },
+        'Unit': {
+            '$id': unit_id
+        },
+        'm_Parts': {
+            '$id': '3243',
+            'm_Owner': {
+                '$ref': '3213'
+            },
+            'm_Parts': [
+                {
+                    'Key': 'Kingmaker.UnitLogic.Parts.UnitPartEncumbrance, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null',
+                    'Value': {
+                        '$id': '3246',
+                        'Owner': {
+                            '$ref': '3213'
+                        },
+                        'm_DexBonusLimiter': {
+                            '$id': '3252',
+                            'AppliedTo': {
+                                '$id': '3253',
+                                'm_Stats': {
+                                    '$id': '3254',
+                                    'Charisma': {
+                                        '$id': '3274',
+                                        'm_BaseValue': 16
+                                    },
+                                    'Constitution': {
+                                        '$id': '3285',
+                                        'm_BaseValue': 10
+                                    },
+                                    'Dexterity': {
+                                        '$id': '3288',
+                                        'm_BaseValue': 10
+                                    },
+                                    'Intelligence': {
+                                        '$id': '3300',
+                                        'm_BaseValue': 10
+                                    },
+                                    'Owner': {
+                                        '$ref': '3213'
+                                    },
+                                    'SaveWill': {
+                                        '$id': '3306',
+                                        'BaseStat': {
+                                            '$id': '3307',
+                                            'm_BaseValue': 16
+                                        }
+                                    },
+                                    'SkillAthletics': {
+                                        '$id': '3318',
+                                        'BaseStat': {
+                                            '$id': '3319',
+                                            'm_BaseValue': 10
+                                        }
+                                    },
+                                    'Strength': {
+                                        '$ref': '3319'
+                                    },
+                                    'Wisdom': {
+                                        '$ref': '3307'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+
+
+@pytest.helpers.register
+def party_base(main_char_id, comp_unit_id, comp_blue_print_id, cust_comp_unit_id=None):
     comp = companion(comp_unit_id, comp_blue_print_id)
+    cust_comp = custom_companion(cust_comp_unit_id)
     return {
         'm_EntityData': [
-            main_character(main_char_id, comp),
+            main_character(main_char_id, comp, cust_comp),
             {
                 '$ref': comp_unit_id
             }

@@ -8,15 +8,27 @@ from editor.character.entity_info import BLUEPRINTS
 MAIN_CHAR_ID = '1'
 COMPANION_ID = '77c11edb92ce0fd408ad96b40fd27121'
 COMP_UNIT_ID = '420'
+CUST_COMP_UNIT_ID = '3641'
 MONEY = 1000
 COMPANION_KEY = {
     '$ref': COMP_UNIT_ID
+}
+CUST_COMP_KEY = {
+    '$ref': CUST_COMP_UNIT_ID
 }
 
 
 def companion(party):
     # dirty shortcut to get testing rolling
     return party['m_EntityData'][0]['Descriptor']['m_Inventory']['m_Items'][0]['Wielder']
+
+
+def cust_companion(party):
+    # dirty shortcut to get testing rolling
+    inventory = party['m_EntityData'][0]['Descriptor']['m_Inventory']
+    item = inventory['m_Items'][1]
+    enchantment = item['ArmorComponent']['m_Enchantments']['m_Facts'][0]
+    return enchantment['m_CurrentContext']['m_OwnerDescriptor']
 
 
 def alignment_data(character):
@@ -36,6 +48,12 @@ def test_name():
     party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
     character = CompanionInfo(party, COMPANION_KEY)
     assert character.name() == companion_expected_name(COMPANION_ID)
+
+
+def test_cust_comp_name_pre_stag_lord_defeated():
+    party = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID, CUST_COMP_UNIT_ID)
+    character = CompanionInfo(party, CUST_COMP_KEY)
+    assert character.name() == 'Elizabeth'
 
 
 def test_experience():
