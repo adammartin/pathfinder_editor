@@ -1,0 +1,1 @@
+"%~dp0winpython\python-3.7.0.amd64\python.exe" "%~dp0pathfinder_editor.py"
