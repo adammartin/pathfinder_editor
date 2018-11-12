@@ -50,6 +50,18 @@ class StatInfo():
     def update_add_attack_bonus(self, value):
         self._update_attribute_value('AdditionalAttackBonus', value)
 
+    def additional_cmb(self):
+        return self._load_attribute_value('AdditionalCMB')
+
+    def update_additional_cmb(self, value):
+        self._update_attribute_value('AdditionalCMB', value)
+
+    def additional_cmd(self):
+        return self._load_attribute_value('AdditionalCMD')
+
+    def update_additional_cmd(self, value):
+        self._update_attribute_value('AdditionalCMD', value)
+
     def _load_attribute_value(self, attribute_name):
         attribute = self._stat_block[attribute_name]
         if 'm_BaseValue' in attribute:

@@ -125,3 +125,31 @@ def test_update_add_attack_bonus():
     stat_info.update_add_attack_bonus(new_add_attack_bonus)
     assert stat_info.add_attack_bonus() == str(new_add_attack_bonus)
     assert stat_info.add_attack_bonus() == str(STATS['AdditionalAttackBonus']['m_BaseValue'])
+
+
+def test_additional_cmb():
+    additional_cmb = str(STATS['AdditionalCMB']['m_BaseValue'])
+    stat_info = StatInfo(STATS)
+    assert stat_info.additional_cmb() == str(additional_cmb)
+
+
+def test_update_additional_cmb():
+    stat_info = StatInfo(STATS)
+    new_additional_cmb = str(int(stat_info.additional_cmb()) + 6)
+    stat_info.update_additional_cmb(new_additional_cmb)
+    assert stat_info.additional_cmb() == str(new_additional_cmb)
+    assert stat_info.additional_cmb() == str(STATS['AdditionalCMB']['m_BaseValue'])
+
+
+def test_additional_cmd():
+    additional_cmd = str(STATS['AdditionalCMD']['m_BaseValue'])
+    stat_info = StatInfo(STATS)
+    assert stat_info.additional_cmd() == str(additional_cmd)
+
+
+def test_update_additional_cmd():
+    stat_info = StatInfo(STATS)
+    new_additional_cmd = str(int(stat_info.additional_cmd()) + 6)
+    stat_info.update_additional_cmd(new_additional_cmd)
+    assert stat_info.additional_cmd() == str(new_additional_cmd)
+    assert stat_info.additional_cmd() == str(STATS['AdditionalCMD']['m_BaseValue'])
