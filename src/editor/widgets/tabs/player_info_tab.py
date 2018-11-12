@@ -21,12 +21,14 @@ class PlayerInfoTab(Tab):
         self._charisma = self._add_field(4, 1, 'Charisma:', func)
         self._character = None
         self._party = None
+        self._portraits = None
         self._expand()
 
     def load_info(self, party, character, save_dir):
-        portraits = list_portrait_dirs(save_dir)
+        self._portraits = list_portrait_dirs(save_dir)
         self._portrait = self._add_dropdown(1, 1, 'Portrait',
-                                            portraits, self._update_info)
+                                            self._portraits,
+                                            self._update_info)
         self._character = character
         self._party = party
         self._dirty_lock = True
@@ -55,7 +57,8 @@ class PlayerInfoTab(Tab):
         self._update(self._intelligence, stats.update_intelligence)
         self._update(self._wisdom, stats.update_wisdom)
         self._update(self._charisma, stats.update_charisma)
-        self._update(self._portrait, self._character.update_portrait)
+        if self._portrait.get() in self._portraits:
+            self._update(self._portrait, self._character.update_portrait)
 
     def _expand(self):
         self._notebook.add(self._panel, text="Player")
