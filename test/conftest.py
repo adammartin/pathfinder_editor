@@ -98,6 +98,36 @@ def header():
 def main_stat_block():
     return {
         '$id': '6544',
+        'AC': {
+            '$id': '6545',
+            'PermanentValue': 10,
+            'Type': 'AC',
+            'm_BaseValue': 10
+        },
+        'AdditionalAttackBonus': {
+            '$id': '6546',
+            'PermanentValue': 0,
+            'Type': 'AdditionalAttackBonus',
+            'm_BaseValue': 0
+        },
+        'AdditionalCMB': {
+            '$id': '6547',
+            'PermanentValue': 0,
+            'Type': 'AdditionalCMB',
+            'm_BaseValue': 0
+        },
+        'AdditionalCMD': {
+            '$id': '6548',
+            'PermanentValue': 0,
+            'Type': 'AdditionalCMD',
+            'm_BaseValue': 0
+        },
+        'AdditionalDamage': {
+            '$id': '6549',
+            'PermanentValue': 0,
+            'Type': 'AdditionalDamage',
+            'm_BaseValue': 0
+        },
         'Charisma': {
             '$id': '6557',
             'm_BaseValue': 14,
@@ -153,6 +183,12 @@ def main_stat_block():
                     'm_BaseValue': 0
                 }
             ]
+        },
+        'HitPoints': {
+            '$id': '6572',
+            'PermanentValue': 37,
+            'Type': 'HitPoints',
+            'm_BaseValue': 37
         },
         'Initiative': {
             '$ref': '6581'
@@ -238,6 +274,12 @@ def main_stat_block():
         },
         'SkillUseMagicDevice': {
             '$ref': '6564'
+        },
+        'Speed': {
+            '$id': '6591',
+            'PermanentValue': 30,
+            'Type': 'Speed',
+            'm_BaseValue': 30
         },
         'Strength': {
             '$ref': '6599'

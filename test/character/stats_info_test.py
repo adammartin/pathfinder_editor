@@ -97,3 +97,31 @@ def test_update_charisma():
     stat_info.update_charisma(new_charisma)
     assert stat_info.charisma() == str(new_charisma)
     assert stat_info.charisma() == str(STATS['Charisma']['m_BaseValue'])
+
+
+def test_base_ac():
+    base_ac = str(STATS['AC']['m_BaseValue'])
+    stat_info = StatInfo(STATS)
+    assert stat_info.base_ac() == str(base_ac)
+
+
+def test_update_base_ac():
+    stat_info = StatInfo(STATS)
+    new_base_ac = str(int(stat_info.base_ac()) + 6)
+    stat_info.update_base_ac(new_base_ac)
+    assert stat_info.base_ac() == str(new_base_ac)
+    assert stat_info.base_ac() == str(STATS['AC']['m_BaseValue'])
+
+
+def test_add_attack_bonus():
+    add_attack_bonus = str(STATS['AdditionalAttackBonus']['m_BaseValue'])
+    stat_info = StatInfo(STATS)
+    assert stat_info.add_attack_bonus() == str(add_attack_bonus)
+
+
+def test_update_add_attack_bonus():
+    stat_info = StatInfo(STATS)
+    new_add_attack_bonus = str(int(stat_info.add_attack_bonus()) + 6)
+    stat_info.update_add_attack_bonus(new_add_attack_bonus)
+    assert stat_info.add_attack_bonus() == str(new_add_attack_bonus)
+    assert stat_info.add_attack_bonus() == str(STATS['AdditionalAttackBonus']['m_BaseValue'])

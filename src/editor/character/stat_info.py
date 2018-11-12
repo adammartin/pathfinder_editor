@@ -38,6 +38,18 @@ class StatInfo():
     def update_charisma(self, value):
         self._update_attribute_value('Charisma', value)
 
+    def base_ac(self):
+        return self._load_attribute_value('AC')
+
+    def update_base_ac(self, value):
+        self._update_attribute_value('AC', value)
+
+    def add_attack_bonus(self):
+        return self._load_attribute_value('AdditionalAttackBonus')
+
+    def update_add_attack_bonus(self, value):
+        self._update_attribute_value('AdditionalAttackBonus', value)
+
     def _load_attribute_value(self, attribute_name):
         attribute = self._stat_block[attribute_name]
         if 'm_BaseValue' in attribute:
