@@ -153,3 +153,45 @@ def test_update_additional_cmd():
     stat_info.update_additional_cmd(new_additional_cmd)
     assert stat_info.additional_cmd() == str(new_additional_cmd)
     assert stat_info.additional_cmd() == str(STATS['AdditionalCMD']['m_BaseValue'])
+
+
+def test_additional_dmg():
+    additional_dmg = str(STATS['AdditionalDamage']['m_BaseValue'])
+    stat_info = StatInfo(STATS)
+    assert stat_info.additional_dmg() == str(additional_dmg)
+
+
+def test_update_additional_dmg():
+    stat_info = StatInfo(STATS)
+    new_additional_dmg = str(int(stat_info.additional_dmg()) + 6)
+    stat_info.update_additional_dmg(new_additional_dmg)
+    assert stat_info.additional_dmg() == str(new_additional_dmg)
+    assert stat_info.additional_dmg() == str(STATS['AdditionalDamage']['m_BaseValue'])
+
+
+def test_hit_points():
+    hit_points = str(STATS['HitPoints']['m_BaseValue'])
+    stat_info = StatInfo(STATS)
+    assert stat_info.hit_points() == str(hit_points)
+
+
+def test_update_hit_points():
+    stat_info = StatInfo(STATS)
+    new_hit_points = str(int(stat_info.hit_points()) + 6)
+    stat_info.update_hit_points(new_hit_points)
+    assert stat_info.hit_points() == str(new_hit_points)
+    assert stat_info.hit_points() == str(STATS['HitPoints']['m_BaseValue'])
+
+
+def test_speed():
+    speed = str(STATS['Speed']['m_BaseValue'])
+    stat_info = StatInfo(STATS)
+    assert stat_info.speed() == str(speed)
+
+
+def test_update_speed():
+    stat_info = StatInfo(STATS)
+    new_speed = str(int(stat_info.speed()) + 6)
+    stat_info.update_speed(new_speed)
+    assert stat_info.speed() == str(new_speed)
+    assert stat_info.speed() == str(STATS['Speed']['m_BaseValue'])

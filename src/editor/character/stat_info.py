@@ -62,6 +62,24 @@ class StatInfo():
     def update_additional_cmd(self, value):
         self._update_attribute_value('AdditionalCMD', value)
 
+    def additional_dmg(self):
+        return self._load_attribute_value('AdditionalDamage')
+
+    def update_additional_dmg(self, value):
+        self._update_attribute_value('AdditionalDamage', value)
+
+    def hit_points(self):
+        return self._load_attribute_value('HitPoints')
+
+    def update_hit_points(self, value):
+        self._update_attribute_value('HitPoints', value)
+
+    def speed(self):
+        return self._load_attribute_value('Speed')
+
+    def update_speed(self, value):
+        self._update_attribute_value('Speed', value)
+
     def _load_attribute_value(self, attribute_name):
         attribute = self._stat_block[attribute_name]
         if 'm_BaseValue' in attribute:
