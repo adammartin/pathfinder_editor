@@ -1,4 +1,5 @@
 class StatInfo():
+    # pylint: disable=too-many-public-methods
     def __init__(self, stat_block):
         self._stat_block = stat_block
 

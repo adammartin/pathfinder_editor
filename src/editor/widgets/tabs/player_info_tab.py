@@ -19,6 +19,13 @@ class PlayerInfoTab(Tab):
         self._intelligence = self._add_field(3, 1, 'Intelligence:', func)
         self._wisdom = self._add_field(4, 0, 'Wisdom:', func)
         self._charisma = self._add_field(4, 1, 'Charisma:', func)
+        self._base_ac = self._add_field(0, 2, 'Base AC', func)
+        self._add_attack_bonus = self._add_field(1, 2, 'Attack Bonus', func)
+        self._additional_cmb = self._add_field(2, 2, 'Additional CMB', func)
+        self._additional_cmd = self._add_field(3, 2, 'Additional CMD', func)
+        self._additional_dmg = self._add_field(4, 2, 'Additional DMG', func)
+        self._hit_points = self._add_field(5, 2, 'Hit Points', func)
+        self._speed = self._add_field(6, 2, 'Speed', func)
         self._character = None
         self._party = None
         self._portraits = None
@@ -42,6 +49,13 @@ class PlayerInfoTab(Tab):
         self._wisdom.set(character.stats.wisdom())
         self._charisma.set(character.stats.charisma())
         self._portrait.set(character.portrait())
+        self._base_ac.set(character.stats.base_ac())
+        self._add_attack_bonus.set(character.stats.add_attack_bonus())
+        self._additional_cmb.set(character.stats.additional_cmb())
+        self._additional_cmd.set(character.stats.additional_cmd())
+        self._additional_dmg.set(character.stats.additional_dmg())
+        self._hit_points.set(character.stats.hit_points())
+        self._speed.set(character.stats.speed())
         self._dirty_lock = False
 
     def _update_info(self, *args):
@@ -59,6 +73,13 @@ class PlayerInfoTab(Tab):
         self._update(self._charisma, stats.update_charisma)
         if self._portrait.get() in self._portraits:
             self._update(self._portrait, self._character.update_portrait)
+        self._update(self._base_ac, stats.update_base_ac)
+        self._update(self._add_attack_bonus, stats.update_add_attack_bonus)
+        self._update(self._additional_cmb, stats.update_additional_cmb)
+        self._update(self._additional_cmd, stats.update_additional_cmd)
+        self._update(self._additional_dmg, stats.update_additional_dmg)
+        self._update(self._hit_points, stats.update_hit_points)
+        self._update(self._speed, stats.update_speed)
 
     def _expand(self):
         self._notebook.add(self._panel, text="Player")
