@@ -32,13 +32,14 @@ class PlayerInfoTab(Tab):
         self._expand()
 
     def load_info(self, party, character, save_dir):
-        self._portraits = list_portrait_dirs(save_dir)
-        self._portrait = self._add_dropdown(1, 1, 'Portrait',
-                                            self._portraits,
-                                            self._update_info)
         self._character = character
         self._party = party
+        self._portraits = list_portrait_dirs(save_dir)
         self._dirty_lock = True
+        self._set_fields(party, character)
+        self._dirty_lock = False
+
+    def _set_fields(self, party, character):
         self._money.set(party.money())
         self._experience.set(character.experience())
         self._alignment.set(character.alignment.alignment())
@@ -48,7 +49,6 @@ class PlayerInfoTab(Tab):
         self._intelligence.set(character.stats.intelligence())
         self._wisdom.set(character.stats.wisdom())
         self._charisma.set(character.stats.charisma())
-        self._portrait.set(character.portrait())
         self._base_ac.set(character.stats.base_ac())
         self._add_attack_bonus.set(character.stats.add_attack_bonus())
         self._additional_cmb.set(character.stats.additional_cmb())
@@ -56,7 +56,14 @@ class PlayerInfoTab(Tab):
         self._additional_dmg.set(character.stats.additional_dmg())
         self._hit_points.set(character.stats.hit_points())
         self._speed.set(character.stats.speed())
-        self._dirty_lock = False
+        if self._portraits:
+            self._add_portrait_dropdown(character)
+
+    def _add_portrait_dropdown(self, character):
+        self._portrait = self._add_dropdown(1, 1, 'Portrait',
+                                            self._portraits,
+                                            self._update_info)
+        self._portrait.set(character.portrait())
 
     def _update_info(self, *args):
         # pylint: disable=unused-argument
@@ -71,7 +78,7 @@ class PlayerInfoTab(Tab):
         self._update(self._intelligence, stats.update_intelligence)
         self._update(self._wisdom, stats.update_wisdom)
         self._update(self._charisma, stats.update_charisma)
-        if self._portrait.get() in self._portraits:
+        if self._has_custom_portraits() and self._portrait_exists():
             self._update(self._portrait, self._character.update_portrait)
         self._update(self._base_ac, stats.update_base_ac)
         self._update(self._add_attack_bonus, stats.update_add_attack_bonus)
@@ -80,6 +87,12 @@ class PlayerInfoTab(Tab):
         self._update(self._additional_dmg, stats.update_additional_dmg)
         self._update(self._hit_points, stats.update_hit_points)
         self._update(self._speed, stats.update_speed)
+
+    def _has_custom_portraits(self):
+        return self._portraits and self._portrait
+
+    def _portrait_exists(self):
+        return self._portrait.get() in self._portraits
 
     def _expand(self):
         self._notebook.add(self._panel, text="Player")

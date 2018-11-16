@@ -19,3 +19,11 @@ def test_list_portrait_dirs(mock_os_walk):
     expected_path = Path(SAVE_DIR).parent / 'Portraits'
     assert list_portrait_dirs(Path(SAVE_DIR)) == sorted(PORTRAITS)
     mock_os_walk.assert_called_with(expected_path)
+
+
+@patch('os.walk')
+def test_list_portrait_dirs(mock_os_walk):
+    mock_os_walk.side_effect = StopIteration()
+    expected_path = Path(SAVE_DIR).parent / 'Portraits'
+    assert list_portrait_dirs(Path(SAVE_DIR)) == []
+    mock_os_walk.assert_called_with(expected_path)
