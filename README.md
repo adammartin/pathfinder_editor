@@ -1,6 +1,6 @@
 # Pathfinder Editor
 
-I created this project really to learn about building a deployable python and pyforms.  It became very enjoyable as a project.  For those that know me you may be shocked that I chose not to TDD this project.  
+I created this project really to learn about building a deployable python and pyforms.  It became very enjoyable as a project.  In addition I chose to leverage this as a lesson in taking a project with no tests and evolving it over time to be test driven.  If you search the code history you will see I did not originally test drive the project at first (on purpose).  Over time I am steadily increasing the tests and the value of them.  This is to help teach a skill of how you can take a crappy code base (yep that's what I had) and evolving it into a maintainable code base protected by tests.  
 
 Basically all the system does is allow the user to navigate and open a save game.  It will then extract that save file and then load the data necessary to allow the players to edit their main character.  The 3 files that matter are header.json (defines the save file name), player.json (where money is stored), and party.json (where the stats are stored).  When saved it will persist the edits and compress them into a new unique .zks safe file.   The file should be unique based off of the current time and it's save label will be pre-pended by "Edited - ".
 
