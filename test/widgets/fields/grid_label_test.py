@@ -24,5 +24,4 @@ def test_label_configured(mock_label):
 @patch('tkinter.Label')
 def test_label_set_on_grid(mock_label):
     label = GridLabel(PANEL, ROW, COLUMN, LABEL_TEXT)
-    mock_label.assert_called_with(PANEL, text=LABEL_TEXT, borderwidth=1)
     mock_label.return_value.grid.assert_called_with(row=ROW, column=COLUMN, sticky=W)
