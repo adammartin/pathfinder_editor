@@ -10,11 +10,6 @@ class Tab():
         self._notebook = notebook
         self._dirty_lock = False
 
-    def _add_large_label(self, a_row, colspan, label_text):
-        label = Label(self._panel, text=label_text, borderwidth=1, fg='red')
-        label.configure(background=DEFAULT_BACKGROUND)
-        label.grid(row=a_row, columnspan=colspan, sticky=W)
-
     def _add_field(self, a_row, a_col, label_text, function):
         col = a_col*2
         self._add_label(a_row, col, label_text)

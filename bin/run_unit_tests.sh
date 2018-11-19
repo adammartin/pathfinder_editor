@@ -10,7 +10,7 @@ MIN_COVERAGE_PERCENTAGE=90
 with_venv
 pushd_silent "$PROJECT_DIR"
 echo "Running pytest"
-pytest --cov="$PYTHON_PACKAGE_NAME" --junit-xml="test_results.xml"
+pytest --cov="$PYTHON_PACKAGE_NAME" --junit-xml="test_results.xml" --ignore="$PROJECT_DIR/winpython"
 echo "Generating coverage report"
 coverage xml
 coverage report --fail-under "$MIN_COVERAGE_PERCENTAGE" --skip-covered
