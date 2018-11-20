@@ -1,22 +1,37 @@
-from editor.widgets.tabs.tab import Tab
+from editor.widgets.tabs.tab import Tab, _set_fields, _update_field
+
+SKILLS = [
+    {'label': 'Athletics', 'position': [0, 0], 'getter': 'athletics',
+     'setter': 'update_athletics'},
+    {'label': 'Mobility', 'position': [0, 1],
+     'getter': 'knowledge_arcana', 'setter': 'update_knowledge_arcana'},
+    {'label': 'Knowledge Arcana', 'position': [1, 0],
+     'getter': 'knowledge_world', 'setter': 'update_knowledge_world'},
+    {'label': 'Knowledge World', 'position': [1, 1], 'getter': 'lore_nature',
+     'setter': 'update_mobility'},
+    {'label': 'Lore Nature', 'position': [2, 0], 'getter': 'lore_religion',
+     'setter': 'update_lore_nature'},
+    {'label': 'Lore Religion', 'position': [2, 1], 'getter': 'mobility',
+     'setter': 'update_lore_religion'},
+    {'label': 'Perception', 'position': [3, 0], 'getter': 'perception',
+     'setter': 'update_perception'},
+    {'label': 'Persuasion', 'position': [3, 1], 'getter': 'persuasion',
+     'setter': 'update_persuasion'},
+    {'label': 'Stealth', 'position': [4, 0], 'getter': 'stealth',
+     'setter': 'update_stealth'},
+    {'label': 'Theivery', 'position': [4, 1], 'getter': 'theivery',
+     'setter': 'update_theivery'},
+    {'label': 'Use Magic Device', 'position': [5, 0],
+     'getter': 'use_magic_device', 'setter': 'update_use_magic_device'},
+]
 
 
 class SkillInfoTab(Tab):
     # pylint: disable=too-many-instance-attributes, too-few-public-methods
     def __init__(self, notebook):
         super(SkillInfoTab, self).__init__(notebook)
-        func = self._update_info
-        self._athletics = self._add_field(0, 0, 'Athletics:', func)
-        self._mobility = self._add_field(0, 1, 'Mobility:', func)
-        self._arcana = self._add_field(1, 0, 'Knowledge Arcana:', func)
-        self._world = self._add_field(1, 1, 'Knowledge World:', func)
-        self._lore_nature = self._add_field(2, 0, 'Lore Nature:', func)
-        self._lore_religion = self._add_field(2, 1, 'Lore Religion:', func)
-        self._perception = self._add_field(3, 0, 'Perception:', func)
-        self._persuasion = self._add_field(3, 1, 'Persuasion:', func)
-        self._stealth = self._add_field(4, 0, 'Stealth:', func)
-        self._theivery = self._add_field(4, 1, 'Theivery:', func)
-        self._magic_dev = self._add_field(5, 0, 'Use Magic Device:', func)
+        self._skill_fields = []
+        self._instantiate_skills()
         self._notebook.add(self._panel, text="Skills")
         self._character = None
         self._panel.config()
@@ -24,31 +39,17 @@ class SkillInfoTab(Tab):
     def load_info(self, character):
         self._character = character
         self._dirty_lock = True
-        self._athletics.set(character.skills.athletics())
-        self._arcana.set(character.skills.knowledge_arcana())
-        self._world .set(character.skills.knowledge_world())
-        self._lore_nature.set(character.skills.lore_nature())
-        self._lore_religion.set(character.skills.lore_religion())
-        self._mobility.set(character.skills.mobility())
-        self._perception.set(character.skills.perception())
-        self._persuasion.set(character.skills.persuasion())
-        self._stealth.set(character.skills.stealth())
-        self._theivery.set(character.skills.theivery())
-        self._magic_dev.set(character.skills.use_magic_device())
+        _set_fields(character.skills, self._skill_fields)
         self._dirty_lock = False
         self._panel.config()
 
-    def _update_info(self, *args):
+    def _instantiate_skills(self):
+        for skill in SKILLS:
+            self._append_grid_field(skill, self._skill_fields,
+                                    self._update_skills)
+
+    def _update_skills(self, *args):
         # pylint: disable=unused-argument
         skills = self._character.skills
-        self._update(self._athletics, skills.update_athletics)
-        self._update(self._arcana, skills.update_knowledge_arcana)
-        self._update(self._world, skills.update_knowledge_world)
-        self._update(self._mobility, skills.update_mobility)
-        self._update(self._lore_nature, skills.update_lore_nature)
-        self._update(self._lore_religion, skills.update_lore_religion)
-        self._update(self._perception, skills.update_perception)
-        self._update(self._persuasion, skills.update_persuasion)
-        self._update(self._stealth, skills.update_stealth)
-        self._update(self._theivery, skills.update_theivery)
-        self._update(self._magic_dev, skills.update_use_magic_device)
+        for field in self._skill_fields:
+            _update_field(field, skills, self._dirty_lock)

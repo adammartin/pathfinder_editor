@@ -1,4 +1,4 @@
-from editor.widgets.tabs.tab import Tab
+from editor.widgets.tabs.tab import Tab, _set_fields, _update_field
 from editor.widgets.fields.field import GridField
 from editor.widgets.fields.field import GridOptionMenu
 from editor.widgets.fields.field import GridPortraitMenu
@@ -61,41 +61,23 @@ class PlayerInfoTab(Tab):
                                           self._portraits,
                                           self._update_info)
         self._dirty_lock = True
-        self._set_fields(party, character)
-        self._dirty_lock = False
-
-    def _set_fields(self, party, character):
         self._money.set(party.money())
-        self._experience.set(character.experience())
         self._alignment.set(character.alignment.alignment())
+        self._experience.set(character.experience())
         self._portrait.set(character.portrait())
-        for stat_field in self._stat_fields:
-            _set_field(stat_field, character.stats)
+        _set_fields(character.stats, self._stat_fields)
+        self._dirty_lock = False
 
     def _instantiate_stats(self):
         for stat in STATS:
-            self._stat_fields.append(
-                {
-                    'field': GridField(self._panel,
-                                       stat['position'][0],
-                                       stat['position'][1],
-                                       stat['label'],
-                                       self._update_stats),
-                    'getter': stat['getter'],
-                    'setter': stat['setter']
-                }
-            )
+            self._append_grid_field(stat, self._stat_fields,
+                                    self._update_stats)
 
     def _update_stats(self, *args):
         # pylint: disable=unused-argument
-        print(args)
         stats = self._character.stats
         for stat_field in self._stat_fields:
-            self._update_stat(stat_field, stats)
-
-    def _update_stat(self, field, stats):
-        field['field'].update(getattr(stats, field['setter']),
-                              self._dirty_lock)
+            _update_field(stat_field, stats, self._dirty_lock)
 
     def _update_info(self, *args):
         # pylint: disable=unused-argument
@@ -110,8 +92,3 @@ class PlayerInfoTab(Tab):
     def _expand(self):
         self._notebook.add(self._panel, text="Player")
         self._panel.config()
-
-
-def _set_field(field, stats):
-    value = getattr(stats, field['getter'])()
-    field['field'].set(value)
