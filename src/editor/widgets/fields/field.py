@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import W
+from tkinter import W, EW
 from editor.widgets.fields import label
 
 
@@ -30,7 +30,7 @@ class GridOptionMenu():
         self._field = tkinter.StringVar()
         self._field.trace('w', event_function)
         self._option_menu = tkinter.OptionMenu(panel, self._field, *choices)
-        self._option_menu.grid(row=a_row, column=actual_col+1, sticky=W)
+        self._option_menu.grid(row=a_row, column=actual_col+1, sticky=EW)
 
     def update(self, function, locked):
         if self._field.get() and not locked:

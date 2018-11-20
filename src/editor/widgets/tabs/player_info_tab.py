@@ -1,6 +1,39 @@
 from editor.widgets.tabs.tab import Tab
+from editor.widgets.fields.field import GridField
+from editor.widgets.fields.field import GridOptionMenu
+from editor.widgets.fields.field import GridPortraitMenu
 from editor.character.alignment_info import ALIGNMENTS
 from editor.character.file_utils import list_portrait_dirs
+
+
+STATS = [
+    {'label': 'Strength', 'position': [2, 0], 'getter': 'strength',
+     'setter': 'update_strength'},
+    {'label': 'Dexterity', 'position': [2, 1], 'getter': 'dexterity',
+     'setter': 'update_dexterity'},
+    {'label': 'Constitution', 'position': [3, 0], 'getter': 'constitution',
+     'setter': 'update_constitution'},
+    {'label': 'Intelligence', 'position': [3, 1], 'getter': 'intelligence',
+     'setter': 'update_intelligence'},
+    {'label': 'Wisdom', 'position': [4, 0], 'getter': 'wisdom',
+     'setter': 'update_wisdom'},
+    {'label': 'Charisma', 'position': [4, 1], 'getter': 'charisma',
+     'setter': 'update_charisma'},
+    {'label': 'Base AC', 'position': [0, 2], 'getter': 'base_ac',
+     'setter': 'update_base_ac'},
+    {'label': 'Attack Bonus', 'position': [1, 2], 'getter': 'add_attack_bonus',
+     'setter': 'update_add_attack_bonus'},
+    {'label': 'Additional CMB', 'position': [2, 2], 'getter': 'additional_cmb',
+     'setter': 'update_additional_cmb'},
+    {'label': 'Additional CMD', 'position': [3, 2], 'getter': 'additional_cmd',
+     'setter': 'update_additional_cmd'},
+    {'label': 'Additional DMG', 'position': [4, 2], 'getter': 'additional_dmg',
+     'setter': 'update_additional_dmg'},
+    {'label': 'Hit Points', 'position': [5, 2], 'getter': 'hit_points',
+     'setter': 'update_hit_points'},
+    {'label': 'Speed', 'position': [6, 2], 'getter': 'speed', 'setter':
+     'update_speed'}
+]
 
 
 class PlayerInfoTab(Tab):
@@ -8,24 +41,13 @@ class PlayerInfoTab(Tab):
     def __init__(self, notebook):
         super(PlayerInfoTab, self).__init__(notebook)
         func = self._update_info
-        self._money = self._add_field(0, 0, 'Money:', func)
-        self._experience = self._add_field(0, 1, 'Experience:', func)
-        self._alignment = self._add_dropdown(1, 0, 'Alignment:',
-                                             ALIGNMENTS.keys(), func)
+        self._stat_fields = []
+        self._money = GridField(self._panel, 0, 0, 'Money:', func)
+        self._experience = GridField(self._panel, 0, 1, 'Experience:', func)
+        self._alignment = GridOptionMenu(self._panel, 1, 0, 'Alignment:',
+                                         ALIGNMENTS.keys(), func)
+        self._instantiate_stats()
         self._portrait = None
-        self._strength = self._add_field(2, 0, 'Strength:', func)
-        self._dexterity = self._add_field(2, 1, 'Dexterity:', func)
-        self._constitution = self._add_field(3, 0, 'Constitution:', func)
-        self._intelligence = self._add_field(3, 1, 'Intelligence:', func)
-        self._wisdom = self._add_field(4, 0, 'Wisdom:', func)
-        self._charisma = self._add_field(4, 1, 'Charisma:', func)
-        self._base_ac = self._add_field(0, 2, 'Base AC', func)
-        self._add_attack_bonus = self._add_field(1, 2, 'Attack Bonus', func)
-        self._additional_cmb = self._add_field(2, 2, 'Additional CMB', func)
-        self._additional_cmd = self._add_field(3, 2, 'Additional CMD', func)
-        self._additional_dmg = self._add_field(4, 2, 'Additional DMG', func)
-        self._hit_points = self._add_field(5, 2, 'Hit Points', func)
-        self._speed = self._add_field(6, 2, 'Speed', func)
         self._character = None
         self._party = None
         self._portraits = None
@@ -35,6 +57,9 @@ class PlayerInfoTab(Tab):
         self._character = character
         self._party = party
         self._portraits = list_portrait_dirs(save_dir)
+        self._portrait = GridPortraitMenu(self._panel, 1, 1, 'Portrait',
+                                          self._portraits,
+                                          self._update_info)
         self._dirty_lock = True
         self._set_fields(party, character)
         self._dirty_lock = False
@@ -43,57 +68,50 @@ class PlayerInfoTab(Tab):
         self._money.set(party.money())
         self._experience.set(character.experience())
         self._alignment.set(character.alignment.alignment())
-        self._strength.set(character.stats.strength())
-        self._dexterity.set(character.stats.dexterity())
-        self._constitution.set(character.stats.constitution())
-        self._intelligence.set(character.stats.intelligence())
-        self._wisdom.set(character.stats.wisdom())
-        self._charisma.set(character.stats.charisma())
-        self._base_ac.set(character.stats.base_ac())
-        self._add_attack_bonus.set(character.stats.add_attack_bonus())
-        self._additional_cmb.set(character.stats.additional_cmb())
-        self._additional_cmd.set(character.stats.additional_cmd())
-        self._additional_dmg.set(character.stats.additional_dmg())
-        self._hit_points.set(character.stats.hit_points())
-        self._speed.set(character.stats.speed())
-        if self._portraits:
-            self._add_portrait_dropdown(character)
-
-    def _add_portrait_dropdown(self, character):
-        self._portrait = self._add_dropdown(1, 1, 'Portrait',
-                                            self._portraits,
-                                            self._update_info)
         self._portrait.set(character.portrait())
+        for stat_field in self._stat_fields:
+            _set_field(stat_field, character.stats)
+
+    def _instantiate_stats(self):
+        for stat in STATS:
+            self._stat_fields.append(
+                {
+                    'field': GridField(self._panel,
+                                       stat['position'][0],
+                                       stat['position'][1],
+                                       stat['label'],
+                                       self._update_stats),
+                    'getter': stat['getter'],
+                    'setter': stat['setter']
+                }
+            )
+
+    def _update_stats(self, *args):
+        # pylint: disable=unused-argument
+        print(args)
+        stats = self._character.stats
+        for stat_field in self._stat_fields:
+            self._update_stat(stat_field, stats)
+
+    def _update_stat(self, field, stats):
+        field['field'].update(getattr(stats, field['setter']),
+                              self._dirty_lock)
 
     def _update_info(self, *args):
         # pylint: disable=unused-argument
         alignment = self._character.alignment
-        stats = self._character.stats
-        self._update(self._money, self._party.update_money)
-        self._update(self._experience, self._character.update_experience)
-        self._update(self._alignment, alignment.update_alignment)
-        self._update(self._strength, stats.update_strength)
-        self._update(self._dexterity, stats.update_dexterity)
-        self._update(self._constitution, stats.update_constitution)
-        self._update(self._intelligence, stats.update_intelligence)
-        self._update(self._wisdom, stats.update_wisdom)
-        self._update(self._charisma, stats.update_charisma)
-        if self._has_custom_portraits() and self._portrait_exists():
-            self._update(self._portrait, self._character.update_portrait)
-        self._update(self._base_ac, stats.update_base_ac)
-        self._update(self._add_attack_bonus, stats.update_add_attack_bonus)
-        self._update(self._additional_cmb, stats.update_additional_cmb)
-        self._update(self._additional_cmd, stats.update_additional_cmd)
-        self._update(self._additional_dmg, stats.update_additional_dmg)
-        self._update(self._hit_points, stats.update_hit_points)
-        self._update(self._speed, stats.update_speed)
-
-    def _has_custom_portraits(self):
-        return self._portraits and self._portrait
-
-    def _portrait_exists(self):
-        return self._portrait.get() in self._portraits
+        self._money.update(self._party.update_money, self._dirty_lock)
+        self._experience.update(self._character.update_experience,
+                                self._dirty_lock)
+        self._alignment.update(alignment.update_alignment, self._dirty_lock)
+        self._portrait.update(self._character.update_portrait,
+                              self._dirty_lock)
 
     def _expand(self):
         self._notebook.add(self._panel, text="Player")
         self._panel.config()
+
+
+def _set_field(field, stats):
+    value = getattr(stats, field['getter'])()
+    field['field'].set(value)

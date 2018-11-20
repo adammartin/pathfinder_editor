@@ -1,6 +1,6 @@
 import pytest
 import tkinter
-from tkinter import W
+from tkinter import W, EW
 from unittest import mock
 from unittest.mock import patch
 from editor.widgets.fields import label
@@ -128,7 +128,7 @@ def test_option_properly_composed(mock_label, mock_var, mock_option):
 @patch('editor.widgets.fields.label.GridLabel')
 def test_option_positioned_on_grid(mock_label, mock_var, mock_option):
     field = GridOptionMenu(PANEL, ROW, COLUMN, LABEL_TEXT, CHOICES, EVENT_FUNCTION)
-    mock_option.return_value.grid.assert_called_with(row=ROW, column=(COLUMN*2)+2, sticky=W)
+    mock_option.return_value.grid.assert_called_with(row=ROW, column=(COLUMN*2)+2, sticky=EW)
 
 
 @patch('tkinter.OptionMenu')
