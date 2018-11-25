@@ -3,15 +3,15 @@ from editor.widgets.tabs.tab import Tab, _set_fields, _update_field
 SKILLS = [
     {'label': 'Athletics', 'position': [0, 0], 'getter': 'athletics',
      'setter': 'update_athletics'},
-    {'label': 'Mobility', 'position': [0, 1],
-     'getter': 'knowledge_arcana', 'setter': 'update_knowledge_arcana'},
-    {'label': 'Knowledge Arcana', 'position': [1, 0],
-     'getter': 'knowledge_world', 'setter': 'update_knowledge_world'},
-    {'label': 'Knowledge World', 'position': [1, 1], 'getter': 'lore_nature',
+    {'label': 'Mobility', 'position': [0, 1], 'getter': 'mobility',
      'setter': 'update_mobility'},
-    {'label': 'Lore Nature', 'position': [2, 0], 'getter': 'lore_religion',
+    {'label': 'Knowledge World', 'position': [1, 0],
+     'getter': 'knowledge_world', 'setter': 'update_knowledge_world'},
+    {'label': 'Knowledge Arcana', 'position': [1, 1],
+     'getter': 'knowledge_arcana', 'setter': 'update_knowledge_arcana'},
+    {'label': 'Lore Nature', 'position': [2, 0], 'getter': 'lore_nature',
      'setter': 'update_lore_nature'},
-    {'label': 'Lore Religion', 'position': [2, 1], 'getter': 'mobility',
+    {'label': 'Lore Religion', 'position': [2, 1], 'getter': 'lore_religion',
      'setter': 'update_lore_religion'},
     {'label': 'Perception', 'position': [3, 0], 'getter': 'perception',
      'setter': 'update_perception'},
@@ -22,7 +22,7 @@ SKILLS = [
     {'label': 'Theivery', 'position': [4, 1], 'getter': 'theivery',
      'setter': 'update_theivery'},
     {'label': 'Use Magic Device', 'position': [5, 0],
-     'getter': 'use_magic_device', 'setter': 'update_use_magic_device'},
+     'getter': 'use_magic_device', 'setter': 'update_use_magic_device'}
 ]
 
 
