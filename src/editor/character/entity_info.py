@@ -20,7 +20,8 @@ BLUEPRINTS = [
     {'blueprint': 'ef4e6551044872b4cb99dff10f707971', 'name': 'Dog'},
     {'blueprint': 'a207eff7953731b44acf1a3fa4354c2d', 'name': 'Bear'},
     {'blueprint': 'f1c0b181a534f4940ae17f243a5968ec', 'name': 'Kanerah'},
-    {'blueprint': 'c807d18a89f96c74f8bb48b31b616323', 'name': 'Kalikke'}
+    {'blueprint': 'c807d18a89f96c74f8bb48b31b616323', 'name': 'Kalikke'},
+    {'blueprint': '6a8af899a123abf459e3e1fedf39e8be', 'name': 'WyvernPeridot'}
 ]
 
 
