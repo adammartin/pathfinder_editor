@@ -51,3 +51,10 @@ class PartyInfo:
                     self._add(companion)
                 except TypeError:
                     pass
+            elif '$id' in entity:
+                try:
+                    key = {'$ref': entity['$id']}
+                    companion = CompanionInfo(self._party, key)
+                    self._add(companion)
+                except TypeError:
+                    pass

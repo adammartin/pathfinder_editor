@@ -546,6 +546,181 @@ def companion(unit_id, comp_blueprint_id):
     }
 
 
+@pytest.helpers.register
+def respec_companion(unit_id, comp_blueprint_id):
+    return {
+        '$id': str(unit_id),
+        'Alignment': {
+            '$id': '5700',
+            'Vector': {
+                'x': 0.707106769,
+                'y': 0.707106769
+            },
+        },
+        'Blueprint': comp_blueprint_id,
+        'CustomName': '',
+        'Progression': {
+            '$id': '2950',
+            'Experience': 25243
+        },
+        'Stats': {
+            '$id': '650',
+            'Charisma': {
+                '$id': '920',
+                'm_BaseValue': 15,
+                'm_Dependents': [
+                    {
+                        '$id': '940',
+                        'm_BaseValue': 1
+                    },
+                    {
+                        '$id': '990',
+                        'm_BaseValue': 1
+                    }
+                ]
+            },
+            'Constitution': {
+                '$id': '1030',
+                'm_BaseValue': 14,
+                'm_Dependents': [
+                    {
+                        '$ref': '660'
+                    },
+                    {
+                        '$id': '1050',
+                        'm_BaseValue': 1
+                    }
+                ]
+            },
+            'Dexterity': {
+                '$id': '1060',
+                'm_BaseValue': 14,
+                'm_Dependents': [
+                    {
+                        '$ref': '690'
+                    },
+                    {
+                        '$id': '1080',
+                        'm_BaseValue': 3
+                    },
+                    {
+                        '$id': '1090',
+                        'm_BaseValue': 0
+                    },
+                    {
+                        '$id': '1110',
+                        'm_BaseValue': 6
+                    },
+                    {
+                        '$id': '1130',
+                        'm_BaseValue': 0
+                    },
+                    {
+                        '$id': '1160',
+                        'm_BaseValue': 0
+                    }
+                ]
+            },
+            'Initiative': {
+                '$ref': '1160'
+            },
+            'Intelligence': {
+                '$id': '1180',
+                'm_BaseValue': 14,
+                'm_Dependents': [
+                    {
+                        '$id': '1200',
+                        'm_BaseValue': 6
+                    },
+                    {
+                        '$id': '1220',
+                        'm_BaseValue': 6
+                    }
+                ]
+            },
+            'SaveWill': {
+                '$id': '1240',
+                'BaseStat': {
+                    '$id': '1250',
+                    'm_BaseValue': 10,
+                    'm_Dependents': [
+                        {
+                            '$ref': '1240'
+                        },
+                        {
+                            '$id': '1270',
+                            'm_BaseValue': 0
+                        },
+                        {
+                            '$id': '1290',
+                            'm_BaseValue': 0
+                        },
+                        {
+                            '$id': '1310',
+                            'm_BaseValue': 0
+                        }
+                    ]
+                },
+                'm_BaseValue': 6
+            },
+            'SkillAthletics': {
+                '$id': '1330',
+                'BaseStat': {
+                    '$id': '1340',
+                    'm_BaseValue': 10,
+                    'm_Dependents': [
+                        {
+                            '$ref': '1330'
+                        }
+                    ]
+                },
+                'm_BaseValue': 0
+            },
+            'SkillKnowledgeArcana': {
+                '$ref': '1200'
+            },
+            'SkillKnowledgeWorld': {
+                '$ref': '1220'
+            },
+            'SkillLoreNature': {
+                '$ref': '1290'
+            },
+            'SkillLoreReligion': {
+                '$ref': '1310'
+            },
+            'SkillMobility': {
+                '$ref': '1090'
+            },
+            'SkillPerception': {
+                '$ref': '1270'
+            },
+            'SkillPersuasion': {
+                '$ref': '940'
+            },
+            'SkillStealth': {
+                '$ref': '1130'
+            },
+            'SkillThievery': {
+                '$ref': '1110'
+            },
+            'SkillUseMagicDevice': {
+                '$ref': '990'
+            },
+            'Strength': {
+                '$ref': '1340'
+            },
+            'Wisdom': {
+                '$ref': '1250'
+            }
+        },
+        'UISettings': {
+            '$id': '4980',
+            'm_CustomPortrait': None
+        },
+        'Unit': {
+            '$ref': str(unit_id)
+        }
+    }
 
 
 @pytest.helpers.register
@@ -669,10 +844,10 @@ def custom_companion(unit_id):
 
 
 @pytest.helpers.register
-def party_base(main_char_id, comp_unit_id, comp_blue_print_id, cust_comp_unit_id=None):
+def party_base(main_char_id, comp_unit_id, comp_blue_print_id, cust_comp_unit_id=None, respec_comp_bp_id=None, respec_companion_unit_id=None):
     comp = companion(comp_unit_id, comp_blue_print_id)
     cust_comp = custom_companion(cust_comp_unit_id)
-    return {
+    data = {
         'm_EntityData': [
             main_character(main_char_id, comp, cust_comp),
             {
@@ -680,3 +855,8 @@ def party_base(main_char_id, comp_unit_id, comp_blue_print_id, cust_comp_unit_id
             }
         ]
     }
+
+    if respec_comp_bp_id:
+        data['m_EntityData'].append(respec_companion(respec_companion_unit_id, respec_comp_bp_id))
+
+    return data

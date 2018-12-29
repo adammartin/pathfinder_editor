@@ -14,13 +14,15 @@ HEADER_JSON = 'header.json'
 PATH = mock.Mock()
 MAIN_CHAR_ID = '1'
 COMPANION_ID = '77c11edb92ce0fd408ad96b40fd27121'
+RESPEC_COMP_ID = 'f9161aa0b3f519c47acbce01f53ee217'
 COMP_UNIT_ID = '420'
+RESPEC_COMP_UNIT_ID = '10001'
 MONEY = 1000
 MAIN_KEY = {
     'm_UniqueId': MAIN_CHAR_ID
 }
 MAIN_DATA = pytest.helpers.player_base(MONEY, MAIN_CHAR_ID)
-PARTY = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID)
+PARTY = pytest.helpers.party_base(MAIN_CHAR_ID, COMP_UNIT_ID, COMPANION_ID, None, RESPEC_COMP_ID, RESPEC_COMP_UNIT_ID)
 HEADER = pytest.helpers.header()
 
 
@@ -90,6 +92,16 @@ def test_main_character(load_json_mock):
 
 @patch('editor.character.file_utils.load_json')
 def test_companions(load_json_mock):
+    load_json_mock.side_effect = fake_loader
+    character_name = companion_expected_name(RESPEC_COMP_ID)
+    party_info = PartyInfo(PATH)
+    character = party_info.members[character_name]
+    assert isinstance(character, CompanionInfo)
+    assert character.name() == character_name
+
+
+@patch('editor.character.file_utils.load_json')
+def test_respec_companions(load_json_mock):
     load_json_mock.side_effect = fake_loader
     character_name = companion_expected_name(COMPANION_ID)
     party_info = PartyInfo(PATH)
