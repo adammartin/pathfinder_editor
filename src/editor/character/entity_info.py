@@ -21,7 +21,19 @@ BLUEPRINTS = [
     {'blueprint': 'a207eff7953731b44acf1a3fa4354c2d', 'name': 'Bear'},
     {'blueprint': 'f1c0b181a534f4940ae17f243a5968ec', 'name': 'Kanerah'},
     {'blueprint': 'c807d18a89f96c74f8bb48b31b616323', 'name': 'Kalikke'},
-    {'blueprint': '6a8af899a123abf459e3e1fedf39e8be', 'name': 'WyvernPeridot'}
+    {'blueprint': '6a8af899a123abf459e3e1fedf39e8be',
+     'name': 'Wyvern Peridot'},
+    {'blueprint': '4050be4512d245f40bf9461074b672f4',
+     'name': 'Summoned Skeleton'},
+    {'blueprint': '8a6986e17799d7d4b90f0c158b31c5b9', 'name': 'Smilodon'},
+    {'blueprint': 'a207eff7953731b44acf1a3fa4354c2d', 'name': 'Bear'},
+    {'blueprint': '3eb6ad60c8b9fe34fafa32e1f429ff5b', 'name': 'Boar'},
+    {'blueprint': '918939943bf32ba4a95470ea696c2ba5', 'name': 'Dog'},
+    {'blueprint': '8e43d402ca1a2ad44ac9d2c9fe99f32c', 'name': 'Elk'},
+    {'blueprint': '54cf380dee486ff42b803174d1b9da1b', 'name': 'Leopard'},
+    {'blueprint': 'e7aa96d15a45238438ae4cfb476f6bb9', 'name': 'Mammoth'},
+    {'blueprint': '57381165c3f4b4740a872e54f62c3a14', 'name': 'Monitor'},
+    {'blueprint': 'eab864d9ca3415644a792792fd81bf87', 'name': 'Wolf'}
 ]
 
 
@@ -40,7 +52,11 @@ class EntityInfo():
         if self._character['CustomName']:
             return self._character['CustomName']
         c_id = self._character['Blueprint']
-        val = next((info for info in BLUEPRINTS if info['blueprint'] == c_id))
+        try:
+            val = _blueprint_info(c_id)
+        except StopIteration:
+            print("Please report this error and blueprint id: " + c_id)
+            return "UNKNOWN"
         return val['name']
 
     def experience(self):
@@ -79,3 +95,7 @@ class EntityInfo():
             return stats
         ref = stats['$ref']
         return search_recursively(self._party_data, ref, id_matches)
+
+
+def _blueprint_info(c_id):
+    return next((info for info in BLUEPRINTS if info['blueprint'] == c_id))
